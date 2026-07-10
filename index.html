@@ -5,150 +5,370 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotional Intelligence AI Portal</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #121212; color: white; padding: 20px; text-align: center; }
-        .container { max-width: 400px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
-        button { background-color: #007bff; color: white; font-weight: bold; cursor: pointer; }
-        .hidden { display: none; }
-        .admin-box { border: 2px solid red; padding: 10px; margin-top: 20px; }
+        :root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #070709; --card-bg: #111116; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Top Navigation Header & Profile */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background: rgba(17,17,22,0.8); border-bottom: 1px solid #1f1f2e; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+        .nav-logo { font-size: 18px; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0,242,254,0.3); }
+        .profile-badge { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; cursor: pointer; border: 2px solid #222; }
+        
+        /* Sliding Profile Panel */
+        .profile-panel { position: fixed; top: 0; right: -320px; width: 280px; height: 100%; background: var(--card-bg); border-left: 1px solid #222; padding: 25px; box-shadow: -10px 0 30px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); z-index: 1000; text-align: left; }
+        .profile-panel.open { right: 0; }
+        .close-panel { text-align: right; font-size: 20px; cursor: pointer; color: #888; }
+
+        /* Core UI Layout Wrapper */
+        .wrapper { max-width: 500px; margin: 30px auto; padding: 0 15px; text-align: center; box-sizing: border-box; }
+        .main-card { background: var(--card-bg); border-radius: 16px; border: 1px solid #1c1c24; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 40px; position: relative; }
+        
+        /* Inputs & Buttons Custom Spec */
+        input, select, button { width: 100%; padding: 14px; margin: 12px 0; border-radius: 10px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
+        input:focus, select:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 10px rgba(0,242,254,0.2); }
+        .btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-google { background: #fff; color: #000; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        /* Selection Node Devices Grid */
+        .device-selector { display: grid; grid-template-columns: repeat(3, 100px); gap: 10px; justify-content: center; margin: 20px 0; }
+        .device-node { padding: 12px; background: #0b0b0f; border: 1px solid #222; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .device-node.active { border-color: var(--neon-blue); background: rgba(0,242,254,0.05); color: var(--neon-blue); }
+        
+        /* Modal & Status Alerts */
+        .hidden { display: none !important; }
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display: flex; align-items:center; justify-content:center; z-index: 2000; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 16px; border: 1px solid #333; max-width: 360px; width: 100%; }
+        .qr-mock { width: 160px; height:160px; background: white; margin: 15px auto; padding: 10px; border-radius: 8px; display: flex; align-items:center; justify-content:center; color: black; font-weight: bold; font-size: 12px; border: 4px solid #000; }
+        .status-pill { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Emotional AI Control Hub</h2>
-    <p style="color: #bbb; font-size: 12px;">Owner: ROUNAK KUMAR</p>
-    
-    <div id="auth-section">
-        <input type="email" id="email" placeholder="Enter Gmail ID">
-        <button onclick="sendOTP()">Send OTP Verification</button>
-        <input type="text" id="otp" placeholder="Enter 4-Digit OTP">
-        <input type="text" id="username" placeholder="Enter Full Name">
-        <input type="password" id="password" placeholder="Set Account Password">
-        <select id="device">
-            <option value="mobile">Mobile Screen System</option>
-            <option value="laptop">Laptop/Desktop Core</option>
-            <option value="robot">Humanoid Robot Actuator</option>
-        </select>
-        <button onclick="register()">Create Free Account</button>
+    <div class="navbar">
+        <div class="nav-logo">EMOTIONAL AI ARCHITECTURE</div>
+        <div id="nav-profile-trigger" class="profile-badge hidden" onclick="toggleProfilePanel()">U</div>
     </div>
 
-    <div id="dashboard-section" class="hidden">
-        <h3>Welcome, <span id="user-display-name"></span></h3>
-        <p>Assigned Device: <strong id="user-device"></strong></p>
-        <p>AI Status: <span id="ai-status" style="color: red; font-weight: bold;">INACTIVE</span></p>
-        <button id="sub-btn" onclick="buySubscription()" style="background-color: #28a745;">Buy Subscription (Test Mode)</button>
+    <div id="side-profile" class="profile-panel">
+        <div class="close-panel" onclick="toggleProfilePanel()">×</div>
+        <h3 style="margin-top:10px; border-bottom:1px solid #222; padding-bottom:10px;">User Profile</h3>
+        <label style="font-size:12px; color:#666;">Account Username</label>
+        <input type="text" id="prof-name" value="">
+        <label style="font-size:12px; color:#666;">Security Password</label>
+        <input type="password" id="prof-pass" value="">
+        <label style="font-size:12px; color:#666;">Linked Email Network</label>
+        <input type="email" id="prof-email" value="">
+        <button class="btn-prime" onclick="saveProfileChanges()" style="margin-top:20px;">Save Credentials</button>
+    </div>
+
+    <div class="wrapper">
         
-        <div id="activation-block" class="hidden">
-            <p>Your Secret Device Password: <strong id="secret-key" style="color: #ffc107;"></strong></p>
-            <input type="password" id="input-key" placeholder="Enter Secret Password to Initialize">
-            <button onclick="toggleAI()" style="background-color: #17a2b8;">Toggle Emotional AI ON/OFF</button>
+        <div id="auth-box" class="main-card">
+            <h2 id="auth-title">System Registration</h2>
+            <p id="auth-subtitle" style="font-size:13px; color:#777; margin-bottom:20px;">Deploy security layers to configure infrastructure account.</p>
+            
+            <div id="step-username-block">
+                <input type="text" id="login-username" placeholder="Enter Full Name">
+                <button class="btn-prime" onclick="nextAuthStep(1)">Continue</button>
+                <div style="margin: 15px 0; color: #444; font-size:12px;">OR</div>
+                <button class="btn-google" onclick="mockGoogleLogin()">
+                    <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.04c1.65 0 3.13.57 4.3 1.69l3.21-3.21C17.56 1.76 14.97 1 12 1 7.37 1 3.4 3.65 1.45 7.5l3.86 2.99C6.23 7.3 8.89 5.04 12 5.04z"/><path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.42 3.57v2.96h3.91c2.28-2.1 3.54-5.19 3.54-8.68z"/><path fill="#FBBC05" d="M5.31 14.51c-.24-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29L1.45 6.94C.52 8.79 0 10.84 0 13s.52 4.21 1.45 6.06l3.86-2.97z"/><path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.95-2.92l-3.91-2.96c-1.09.73-2.48 1.17-4.04 1.17-3.11 0-5.77-2.26-6.69-5.45L1.45 15.8C3.4 19.65 7.37 23 12 23z"/></svg>
+                    Continue with Google
+                </button>
+            </div>
+            
+            <div id="step-password-block" class="hidden">
+                <input type="password" id="login-password" placeholder="Set Account Password">
+                <button class="btn-prime" onclick="nextAuthStep(2)">Continue</button>
+            </div>
+            
+            <div id="step-email-block" class="hidden">
+                <input type="email" id="login-email" placeholder="Enter Gmail Address ID">
+                <button class="btn-prime" onclick="finalizeRegistration()">Complete Node Login</button>
+            </div>
+        </div>
+
+        <div id="dashboard-box" class="main-card hidden">
+            <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.5px;">EMOTIONAL INTELLIGENCE AI</h2>
+            <p style="color:#888; font-size:13px; margin-top:5px;">Select operational interface environment to allocate service layer.</p>
+            
+            <div class="device-selector">
+                <div class="device-node" id="dev-sub-mobile" onclick="selectSubDevice('mobile')">📱<br><br>PHONE</div>
+                <div class="device-node" id="dev-sub-laptop" onclick="selectSubDevice('laptop')">💻<br><br>LAPTOP</div>
+                <div class="device-node" id="dev-sub-robot" onclick="selectSubDevice('robot')">🤖<br><br>ROBOT</div>
+            </div>
+
+            <div id="pricing-tier-block" class="hidden" style="margin-top:25px; border-top:1px solid #1c1c24; padding-top:20px;">
+                <h4 style="text-align:left; margin-bottom:10px;">Available Infrastructure Subscriptions</h4>
+                <div style="background:#0b0b0f; padding:15px; border-radius:8px; text-align:left; margin-bottom:10px; border:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>Monthly Allocation Token</strong><br><small style="color:#666;">Standard rolling cluster</small></div>
+                    <button onclick="openPaymentGateway('Monthly')" style="width:auto; padding:8px 15px; margin:0;">Select Tier</button>
+                </div>
+                <div style="background:#0b0b0f; padding:15px; border-radius:8px; text-align:left; margin-bottom:10px; border:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>Yearly Enterprise Token</strong><br><small style="color:#666;">High priority compute nodes</small></div>
+                    <button onclick="openPaymentGateway('Yearly')" style="width:auto; padding:8px 15px; margin:0;">Select Tier</button>
+                </div>
+                <div style="background:#0b0b0f; padding:15px; border-radius:8px; text-align:left; margin-bottom:10px; border:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>Lifetime Core License</strong><br><small style="color:#666;">Unlimited persistent models</small></div>
+                    <button onclick="openPaymentGateway('Lifetime')" style="width:auto; padding:8px 15px; margin:0;">Select Tier</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="connector-box" class="main-card hidden">
+            <h3 style="margin-top:0; color:#fff;">Connect to Emotional Intelligence AI</h3>
+            <p style="color:#777; font-size:12px; margin-top:-5px; margin-bottom:20px;">Inject generated runtime credentials to activate the background model service worker.</p>
+            
+            <div class="device-selector">
+                <div class="device-node" id="dev-con-mobile" onclick="selectConDevice('mobile')">📱<br><br>PHONE</div>
+                <div class="device-node" id="dev-con-laptop" onclick="selectConDevice('laptop')">💻<br><br>LAPTOP</div>
+                <div class="device-node" id="dev-con-robot" onclick="selectConDevice('robot')">🤖<br><br>ROBOT</div>
+            </div>
+
+            <div id="token-gate" class="hidden">
+                <input type="password" id="input-secret-token" placeholder="Enter Valid System Secret Key">
+                <button class="btn-prime" onclick="verifyAndConnectAI()">Validate & Initialize Node</button>
+                <div id="activation-light" class="status-pill hidden"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="payment-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 style="margin-top:0;" id="payment-modal-title">Secure Checkout Gateway</h3>
+            <p style="font-size:12px; color:#888;">Scan the auto-generated merchant terminal QR matrix or use native UPI applications below.</p>
+            
+            <div class="qr-mock">
+                <div style="text-align:center;">
+                    <span style="font-size:32px;">🔲</span><br>
+                    <span style="font-size:10px; font-family:monospace; color:#333;">MERCHANT TERMINAL</span>
+                </div>
+            </div>
+            
+            <div style="font-size:11px; color:#aaa; margin:10px 0;">UPI INSTANT REDIRECT NETWORKS</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <button onclick="processMockPayment()" style="background:#5f259f; font-size:11px; margin:0; padding:10px;">PhonePe</button>
+                <button onclick="processMockPayment()" style="background:#1c2434; font-size:11px; margin:0; padding:10px;">BharatPay</button>
+            </div>
+            <button onclick="processMockPayment()" style="background:#00b0ff; color:black; font-weight:bold; font-size:12px; margin-top:10px; margin-bottom:0;">Simulate Direct Online Payment</button>
+            
+            <div id="post-payment-block" class="hidden" style="margin-top:20px; border-top:1px solid #333; padding-top:15px;">
+                <div style="color:var(--neon-green); font-weight:bold; font-size:13px; margin-bottom:5px;">✓ PAYMENT LAYER VERIFIED</div>
+                <div style="background:#050507; padding:10px; font-family:monospace; border:1px solid #222; font-size:14px; color:#ffc107; border-radius:6px;" id="generated-key-display"></div>
+                <button onclick="closePaymentModal()" style="background:#222; color:#fff; border:1px solid #444; margin-top:15px; margin-bottom:0;">Back to Dashboard</button>
+            </div>
         </div>
     </div>
 
-    <div id="admin-section" class="admin-box hidden">
-        <h3 style="color: red;">Company Head Control Panel</h3>
-        <input type="email" id="target-email" placeholder="Target User Email">
-        <button onclick="adminAction('activate_free')" style="background-color: #28a745;">Force Activate FREE</button>
-        <button onclick="adminAction('cancel')" style="background-color: #dc3545;">Force Cancel Subscription</button>
-        <p><strong>Live Code Editor Block:</strong></p>
-        <textarea id="code-block" style="width:100%; height:100px; background:#000; color:#0f0; border:1px solid #333; font-family:monospace;"></textarea>
-        <button onclick="updateLiveCode()" style="background-color: #ffc107; color: black;">Update Live Engine Code</button>
-    </div>
-</div>
+    <script>
+        let globalDatabase = JSON.parse(localStorage.getItem('ai_db')) || {};
+        let activeUserSession = localStorage.getItem('active_user') || null;
+        let selectedSubDeviceType = null;
+        let selectedConDeviceType = null;
+        let temporaryUserRegistrationName = "";
+        let temporaryUserRegistrationPassword = "";
 
-<script>
-    let userDatabase = {};
-    let adminEmail = "AAPKI_MAIN_GMAIL_ID@gmail.com"; // Yahan apni Gmail dalna
-    let currentUser = null;
-
-    function sendOTP() {
-        let email = document.getElementById('email').value;
-        if(!email) return alert("Gmail ID daalna zaroori hai!");
-        alert("Mock OTP '1234' sent securely to: " + email);
-    }
-
-    function register() {
-        let email = document.getElementById('email').value;
-        let otp = document.getElementById('otp').value;
-        let name = document.getElementById('username').value;
-        let pass = document.getElementById('password').value;
-        let device = document.getElementById('device').value;
-
-        if(otp !== "1234") return alert("Invalid OTP Code!");
-
-        let secretKey = "AI-" + Math.random().toString(36).substring(3, 11).toUpperCase();
-
-        userDatabase[email] = {
-            name: name, password: pass, device: device,
-            subscription: false, secretKey: secretKey, aiActive: false
+        window.onload = function() {
+            if (activeUserSession && globalDatabase[activeUserSession]) {
+                initializeSessionDashboard();
+            } else {
+                setupFreshAuthScreen();
+            }
         };
 
-        currentUser = email;
-        alert("Account Created via Web Engine!");
-        loadDashboard();
-    }
-
-    function loadDashboard() {
-        let user = userDatabase[currentUser];
-        document.getElementById('auth-section').classList.add('hidden');
-        document.getElementById('dashboard-section').classList.remove('hidden');
-        document.getElementById('user-display-name').innerText = user.name;
-        document.getElementById('user-device').innerText = user.device.toUpperCase();
-        document.getElementById('secret-key').innerText = user.secretKey;
-
-        if(currentUser === adminEmail) {
-            document.getElementById('admin-section').classList.remove('hidden');
-            document.getElementById('code-block').value = document.documentElement.innerHTML;
+        function setupFreshAuthScreen() {
+            document.getElementById('auth-box').classList.remove('hidden');
+            document.getElementById('nav-profile-trigger').classList.add('hidden');
+            document.getElementById('dashboard-box').classList.add('hidden');
+            document.getElementById('connector-box').classList.add('hidden');
+            
+            let userCount = Object.keys(globalDatabase).length;
+            if (userCount > 0) {
+                document.getElementById('auth-title').innerText = "System Authorization";
+                document.getElementById('auth-subtitle').innerText = "Existing network profiles detected. Authenticate credentials.";
+                document.getElementById('step-username-block').querySelector('input').placeholder = "Enter Registered Name";
+            } else {
+                document.getElementById('auth-title').innerText = "System Registration";
+                document.getElementById('auth-subtitle').innerText = "Deploy security layers to configure infrastructure account.";
+            }
         }
-    }
 
-    function buySubscription() {
-        userDatabase[currentUser].subscription = true;
-        alert("Subscription Key Validated via Razorpay Mock API!");
-        document.getElementById('sub-btn').classList.add('hidden');
-        document.getElementById('activation-block').classList.remove('hidden');
-    }
+        function nextAuthStep(currentStep) {
+            if (currentStep === 1) {
+                let nameVal = document.getElementById('login-username').value.trim();
+                if (!nameVal) return alert("Validation Failed: Enter profile name identifier.");
+                temporaryUserRegistrationName = nameVal;
+                
+                let isExisting = Object.values(globalDatabase).some(u => u.name.toLowerCase() === nameVal.toLowerCase());
+                
+                document.getElementById('step-username-block').classList.add('hidden');
+                document.getElementById('step-password-block').classList.remove('hidden');
+                
+                if(isExisting) {
+                    document.getElementById('step-password-block').querySelector('input').placeholder = "Enter Security Password";
+                }
+            } else if (currentStep === 2) {
+                let passVal = document.getElementById('login-password').value.trim();
+                if (!passVal) return alert("Validation Failed: Security password missing.");
+                temporaryUserRegistrationPassword = passVal;
 
-    function toggleAI() {
-        let user = userDatabase[currentUser];
-        let inputKey = document.getElementById('input-key').value;
-
-        if(!user.subscription) return alert("Error: Subscription Required!");
-        if(inputKey !== user.secretKey) return alert("Error: Incorrect Secret Device Password!");
-
-        user.aiActive = !user.aiActive;
-        let statusText = document.getElementById('ai-status');
-        
-        if(user.aiActive) {
-            statusText.innerText = "ACTIVE - Syncing Micro-Expressions & Vocal Biomarkers to Drive";
-            statusText.style.color = "#28a745";
-            alert("SUCCESS: Emotional Intelligence initialized on: " + user.device);
-        } else {
-            statusText.innerText = "INACTIVE";
-            statusText.style.color = "red";
+                let existingUserKey = Object.keys(globalDatabase).find(k => globalDatabase[k].name.toLowerCase() === temporaryUserRegistrationName.toLowerCase());
+                
+                if (existingUserKey) {
+                    if (globalDatabase[existingUserKey].password === passVal) {
+                        activeUserSession = existingUserKey;
+                        localStorage.setItem('active_user', activeUserSession);
+                        alert("Authorization Verified. Linking Active Node Instance.");
+                        initializeSessionDashboard();
+                    } else {
+                        alert("Security Exception: Access signature mismatched.");
+                        setupFreshAuthScreen();
+                        document.getElementById('login-username').value = "";
+                        document.getElementById('login-password').value = "";
+                    }
+                } else {
+                    document.getElementById('step-password-block').classList.add('hidden');
+                    document.getElementById('step-email-block').classList.remove('hidden');
+                }
+            }
         }
-    }
 
-    function adminAction(action) {
-        let target = document.getElementById('target-email').value;
-        if(!userDatabase[target]) return alert("User database mein nahi mila.");
-        
-        if(action === 'activate_free') {
-            userDatabase[target].subscription = true;
-            alert("Subscription forced to FREE ACTIVE for: " + target);
-        } else {
-            userDatabase[target].subscription = false;
-            userDatabase[target].aiActive = false;
-            alert("Subscription CANCELLED by Company Head for: " + target);
+        function mockGoogleLogin() {
+            let mockEmail = "user." + Math.floor(1000 + Math.random() * 9000) + "@gmail.com";
+            globalDatabase[mockEmail] = { name: "Google Operator", password: "GoogleDefaultAuthPass123", email: mockEmail, key: null, activeDevice: null };
+            localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+            activeUserSession = mockEmail;
+            localStorage.setItem('active_user', activeUserSession);
+            alert("OAuth Tunnel Established via Google Services Secure Engine.");
+            initializeSessionDashboard();
         }
-    }
 
-    function updateLiveCode() {
-        alert("Success: Live code configurations parsed.");
-    }
-</script>
+        function finalizeRegistration() {
+            let emailVal = document.getElementById('login-email').value.trim();
+            if (!emailVal) return alert("Validation Failed: Target interface email protocol required.");
+            if (globalDatabase[emailVal]) return alert("Exception: Duplicate node route. Email index exists.");
 
+            globalDatabase[emailVal] = { name: temporaryUserRegistrationName, password: temporaryUserRegistrationPassword, email: emailVal, key: null, activeDevice: null };
+            localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+            activeUserSession = emailVal;
+            localStorage.setItem('active_user', activeUserSession);
+            alert("Infrastructure Account Initialized Successfully.");
+            initializeSessionDashboard();
+        }
+
+        function initializeSessionDashboard() {
+            let user = globalDatabase[activeUserSession];
+            document.getElementById('auth-box').classList.add('hidden');
+            document.getElementById('dashboard-box').classList.remove('hidden');
+            document.getElementById('connector-box').classList.remove('hidden');
+            
+            let trigger = document.getElementById('nav-profile-trigger');
+            trigger.classList.remove('hidden');
+            trigger.innerText = user.name.charAt(0).toUpperCase();
+
+            document.getElementById('prof-name').value = user.name;
+            document.getElementById('prof-pass').value = user.password;
+            document.getElementById('prof-email').value = user.email;
+
+            // Reset dynamic selections
+            resetDeviceSelections();
+        }
+
+        function resetDeviceSelections() {
+            document.querySelectorAll('.device-node').forEach(n => n.classList.remove('active'));
+            document.getElementById('pricing-tier-block').classList.add('hidden');
+            document.getElementById('token-gate').classList.add('hidden');
+            document.getElementById('activation-light').classList.add('hidden');
+        }
+
+        function toggleProfilePanel() {
+            document.getElementById('side-profile').classList.toggle('open');
+        }
+
+        function saveProfileChanges() {
+            let newName = document.getElementById('prof-name').value.trim();
+            let newPass = document.getElementById('prof-pass').value.trim();
+            let newEmail = document.getElementById('prof-email').value.trim();
+
+            if(!newName || !newPass || !newEmail) return alert("Error: Profile properties cannot remain empty.");
+
+            let userData = globalDatabase[activeUserSession];
+            userData.name = newName;
+            userData.password = newPass;
+
+            if (newEmail !== activeUserSession) {
+                globalDatabase[newEmail] = userData;
+                delete globalDatabase[activeUserSession];
+                activeUserSession = newEmail;
+                localStorage.setItem('active_user', activeUserSession);
+            } else {
+                globalDatabase[activeUserSession] = userData;
+            }
+
+            localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+            alert("Database Synced: Security profile modified.");
+            toggleProfilePanel();
+            initializeSessionDashboard();
+        }
+
+        function selectSubDevice(type) {
+            selectedSubDeviceType = type;
+            document.getElementById('dev-sub-mobile').classList.remove('active');
+            document.getElementById('dev-sub-laptop').classList.remove('active');
+            document.getElementById('dev-sub-robot').classList.remove('active');
+            document.getElementById('dev-sub-' + type).classList.add('active');
+            document.getElementById('pricing-tier-block').classList.remove('hidden');
+        }
+
+        function selectConDevice(type) {
+            selectedConDeviceType = type;
+            document.getElementById('dev-con-mobile').classList.remove('active');
+            document.getElementById('dev-con-laptop').classList.remove('active');
+            document.getElementById('dev-con-robot').classList.remove('active');
+            document.getElementById('dev-con-' + type).classList.add('active');
+            document.getElementById('token-gate').classList.remove('hidden');
+        }
+
+        function openPaymentGateway(tier) {
+            document.getElementById('payment-modal-title').innerText = "Checkout: " + tier + " Allocation Plan";
+            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('post-payment-block').classList.add('hidden');
+        }
+
+        function processMockPayment() {
+            let generatedKey = "KEY-NX-" + Math.random().toString(36).substring(3, 11).toUpperCase();
+            globalDatabase[activeUserSession].key = generatedKey;
+            localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+            
+            document.getElementById('generated-key-display').innerText = generatedKey;
+            document.getElementById('post-payment-block').classList.remove('hidden');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+        }
+
+        function verifyAndConnectAI() {
+            let tokenInput = document.getElementById('input-secret-token').value.trim();
+            let actualKey = globalDatabase[activeUserSession].key;
+            let light = document.getElementById('activation-light');
+
+            if (!actualKey || tokenInput !== actualKey) {
+                light.classList.remove('hidden');
+                light.innerText = "VERIFICATION EXCEPTION: CRITICAL INVALID KEY TOKEN";
+                light.style.background = "#ff3344";
+                light.style.color = "#fff";
+                return;
+            }
+
+            globalDatabase[activeUserSession].activeDevice = selectedConDeviceType;
+            localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+
+            light.classList.remove('hidden');
+            light.innerText = "SUCCESS: CONFIGURATIONS PARSED. AMBIENT ENGINE LIVE ON " + selectedConDeviceType.toUpperCase();
+            light.style.background = "var(--neon-green)";
+            light.style.color = "#000";
+        }
+    </script>
 </body>
 </html>
-
