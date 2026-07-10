@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Intelligence AI Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #121212; color: white; padding: 20px; text-align: center; }
+        .container { max-width: 400px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; font-weight: bold; cursor: pointer; }
+        .hidden { display: none; }
+        .admin-box { border: 2px solid red; padding: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Emotional AI Control Hub</h2>
+    <p style="color: #bbb; font-size: 12px;">Owner: ROUNAK KUMAR</p>
+    
+    <div id="auth-section">
+        <input type="email" id="email" placeholder="Enter Gmail ID">
+        <button onclick="sendOTP()">Send OTP Verification</button>
+        <input type="text" id="otp" placeholder="Enter 4-Digit OTP">
+        <input type="text" id="username" placeholder="Enter Full Name">
+        <input type="password" id="password" placeholder="Set Account Password">
+        <select id="device">
+            <option value="mobile">Mobile Screen System</option>
+            <option value="laptop">Laptop/Desktop Core</option>
+            <option value="robot">Humanoid Robot Actuator</option>
+        </select>
+        <button onclick="register()">Create Free Account</button>
+    </div>
+
+    <div id="dashboard-section" class="hidden">
+        <h3>Welcome, <span id="user-display-name"></span></h3>
+        <p>Assigned Device: <strong id="user-device"></strong></p>
+        <p>AI Status: <span id="ai-status" style="color: red; font-weight: bold;">INACTIVE</span></p>
+        <button id="sub-btn" onclick="buySubscription()" style="background-color: #28a745;">Buy Subscription (Test Mode)</button>
+        
+        <div id="activation-block" class="hidden">
+            <p>Your Secret Device Password: <strong id="secret-key" style="color: #ffc107;"></strong></p>
+            <input type="password" id="input-key" placeholder="Enter Secret Password to Initialize">
+            <button onclick="toggleAI()" style="background-color: #17a2b8;">Toggle Emotional AI ON/OFF</button>
+        </div>
+    </div>
+
+    <div id="admin-section" class="admin-box hidden">
+        <h3 style="color: red;">Company Head Control Panel</h3>
+        <input type="email" id="target-email" placeholder="Target User Email">
+        <button onclick="adminAction('activate_free')" style="background-color: #28a745;">Force Activate FREE</button>
+        <button onclick="adminAction('cancel')" style="background-color: #dc3545;">Force Cancel Subscription</button>
+        <p><strong>Live Code Editor Block:</strong></p>
+        <textarea id="code-block" style="width:100%; height:100px; background:#000; color:#0f0; border:1px solid #333; font-family:monospace;"></textarea>
+        <button onclick="updateLiveCode()" style="background-color: #ffc107; color: black;">Update Live Engine Code</button>
+    </div>
+</div>
+
+<script>
+    let userDatabase = {};
+    let adminEmail = "AAPKI_MAIN_GMAIL_ID@gmail.com"; // Yahan apni Gmail dalna
+    let currentUser = null;
+
+    function sendOTP() {
+        let email = document.getElementById('email').value;
+        if(!email) return alert("Gmail ID daalna zaroori hai!");
+        alert("Mock OTP '1234' sent securely to: " + email);
+    }
+
+    function register() {
+        let email = document.getElementById('email').value;
+        let otp = document.getElementById('otp').value;
+        let name = document.getElementById('username').value;
+        let pass = document.getElementById('password').value;
+        let device = document.getElementById('device').value;
+
+        if(otp !== "1234") return alert("Invalid OTP Code!");
+
+        let secretKey = "AI-" + Math.random().toString(36).substring(3, 11).toUpperCase();
+
+        userDatabase[email] = {
+            name: name, password: pass, device: device,
+            subscription: false, secretKey: secretKey, aiActive: false
+        };
+
+        currentUser = email;
+        alert("Account Created via Web Engine!");
+        loadDashboard();
+    }
+
+    function loadDashboard() {
+        let user = userDatabase[currentUser];
+        document.getElementById('auth-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.remove('hidden');
+        document.getElementById('user-display-name').innerText = user.name;
+        document.getElementById('user-device').innerText = user.device.toUpperCase();
+        document.getElementById('secret-key').innerText = user.secretKey;
+
+        if(currentUser === adminEmail) {
+            document.getElementById('admin-section').classList.remove('hidden');
+            document.getElementById('code-block').value = document.documentElement.innerHTML;
+        }
+    }
+
+    function buySubscription() {
+        userDatabase[currentUser].subscription = true;
+        alert("Subscription Key Validated via Razorpay Mock API!");
+        document.getElementById('sub-btn').classList.add('hidden');
+        document.getElementById('activation-block').classList.remove('hidden');
+    }
+
+    function toggleAI() {
+        let user = userDatabase[currentUser];
+        let inputKey = document.getElementById('input-key').value;
+
+        if(!user.subscription) return alert("Error: Subscription Required!");
+        if(inputKey !== user.secretKey) return alert("Error: Incorrect Secret Device Password!");
+
+        user.aiActive = !user.aiActive;
+        let statusText = document.getElementById('ai-status');
+        
+        if(user.aiActive) {
+            statusText.innerText = "ACTIVE - Syncing Micro-Expressions & Vocal Biomarkers to Drive";
+            statusText.style.color = "#28a745";
+            alert("SUCCESS: Emotional Intelligence initialized on: " + user.device);
+        } else {
+            statusText.innerText = "INACTIVE";
+            statusText.style.color = "red";
+        }
+    }
+
+    function adminAction(action) {
+        let target = document.getElementById('target-email').value;
+        if(!userDatabase[target]) return alert("User database mein nahi mila.");
+        
+        if(action === 'activate_free') {
+            userDatabase[target].subscription = true;
+            alert("Subscription forced to FREE ACTIVE for: " + target);
+        } else {
+            userDatabase[target].subscription = false;
+            userDatabase[target].aiActive = false;
+            alert("Subscription CANCELLED by Company Head for: " + target);
+        }
+    }
+
+    function updateLiveCode() {
+        alert("Success: Live code configurations parsed.");
+    }
+</script>
+
+</body>
+</html>
+
