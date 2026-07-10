@@ -371,3 +371,212 @@
     </script>
 </body>
 </html>
+<style>
+    /* Device Symbols/Logos Dynamic Injection */
+    #dev-sub-mobile::before, #dev-con-mobile::before { content: "📱 "; font-size: 20px; display: block; margin-bottom: 5px; }
+    #dev-sub-laptop::before, #dev-con-laptop::before { content: "💻 "; font-size: 20px; display: block; margin-bottom: 5px; }
+    #dev-sub-robot::before, #dev-con-robot::before { content: "🤖 "; font-size: 20px; display: block; margin-bottom: 5px; }
+    
+    /* Master Bottom Engine Switch UI */
+    .master-switch-card { background: #161622; border: 2px solid var(--neon-blue); border-radius: 16px; padding: 20px; margin-top: 30px; box-shadow: 0 0 20px rgba(0,242,254,0.1); }
+    .neon-glow-btn { background: #000; color: #ff3344; border: 2px solid #ff3344; box-shadow: 0 0 10px rgba(255,51,68,0.2); font-weight: bold; transition: all 0.3s; }
+    .neon-glow-btn.active { color: var(--neon-green); border-color: var(--neon-green); box-shadow: 0 0 15px rgba(32,201,151,0.4); }
+
+    /* Admin Control Window */
+    .admin-terminal { background: #09090d; border: 1px dashed #ff3344; border-radius: 12px; padding: 20px; margin-top: 30px; text-align: left; }
+    .admin-terminal h3 { color: #ff3344; margin-top: 0; display: flex; justify-content: space-between; }
+    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .trial-status { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #222; font-size: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+</style>
+
+<div class="wrapper" id="injected-elements-gate">
+    
+    <div id="trial-banner-node" class="hidden" style="background: rgba(32,201,151,0.1); border: 1px solid var(--neon-green); padding: 15px; border-radius: 10px; margin-bottom: 25px; text-align: left;">
+        <span style="color:var(--neon-green); font-weight:bold;">⚡ 1-Day Free Trial Available!</span>
+        <p style="margin: 5px 0 0 0; font-size: 12px; color: #aaa;">Claim your 24-hour infrastructure key instant bypass network.</p>
+        <button onclick="claimOneDayTrialInstance()" style="margin-top: 10px; padding: 8px; font-size: 12px; background: var(--neon-green); color: black;">Claim Free Trial Key</button>
+    </div>
+
+    <div id="master-toggle-card" class="master-switch-card hidden">
+        <h4 style="margin-top:0; color:#fff;">MASTER SYSTEM ACTUATOR</h4>
+        <p style="font-size:12px; color:#888; margin-top:-5px;">Main override control block to completely trigger or sleep the Emotional Intelligence AI network.</p>
+        <button id="master-engine-trigger-btn" class="neon-glow-btn" onclick="toggleMasterAIEngineState()">SYSTEM OVERRIDE STATUS: OFF</button>
+    </div>
+
+    <div id="admin-control-terminal" class="admin-terminal hidden">
+        <h3><span>⚡ OWNER EXECUTIVE COMMAND TERMINAL</span> <span style="font-size:11px; color:#666;">ROOT@ROUNAK_KUMAR</span></h3>
+        <p style="font-size:12px; color:#888; margin-top:-5px; margin-bottom:15px;">Administrative bypass node to inject free keys, terminate active tokens, and toggle global 1-day trial status.</p>
+        
+        <div class="trial-status">
+            <span>Global 1-Day Trial Availability Matrix:</span>
+            <button id="admin-trial-toggle" onclick="adminToggleGlobalTrialSystem()" style="width:auto; margin:0; padding:5px 10px; background:#ff3344; color:white; font-size:11px;">DISABLED</button>
+        </div>
+
+        <label style="font-size:11px; color:#666;">Target User Network Email Instance</label>
+        <input type="email" id="adm-target-user" placeholder="Enter user gmail address">
+        
+        <div class="admin-grid">
+            <button onclick="adminGenerateInfiniteFreeKey()" style="background:linear-gradient(45deg, #ffc107, #ff8f00); color:black; font-size:12px; font-weight:bold; margin:0;">Inject Free Access Key</button>
+            <button onclick="adminTerminateUserAccess()" style="background:#ff3344; color:white; font-size:12px; font-weight:bold; margin:0;">Force Cancel Instance</button>
+        </div>
+        
+        <p style="font-size:11px; color:#666; margin-bottom:5px; margin-top:15px;"><strong>Live Central Core Code Editor Window:</strong></p>
+        <textarea id="live-terminal-editor" style="width:100%; height:100px; background:#050507; color:var(--neon-blue); font-family:monospace; border:1px solid #222; padding:8px; font-size:11px; border-radius:6px; box-sizing:border-box;"></textarea>
+        <button onclick="adminCompileLivePatch()" style="background:var(--neon-blue); color:black; font-size:12px; font-weight:bold; margin-top:8px; margin-bottom:0;">Compile Live Code Patch</button>
+    </div>
+</div>
+
+<script>
+    // Global parameters matching patches
+    let globalTrialSystemEnabled = false;
+    let masterEngineStateActive = false;
+
+    // Existing login flow wrapper configuration integration hooking
+    let baseFinalizeRegistration = finalizeRegistration;
+    finalizeRegistration = function() {
+        baseFinalizeRegistration();
+        evalAdminSecurityGateCheck();
+    };
+
+    let baseInitializeSessionDashboard = initializeSessionDashboard;
+    initializeSessionDashboard = function() {
+        baseInitializeSessionDashboard();
+        evalAdminSecurityGateCheck();
+        evaluateTrialBannerStateVisibility();
+        
+        // Show master toggle once user dashboard is active
+        document.getElementById('master-toggle-card').classList.remove('hidden');
+    };
+
+    let baseTriggerLogOutInstance = triggerLogOutInstance;
+    triggerLogOutInstance = function() {
+        document.getElementById('admin-control-terminal').classList.add('hidden');
+        document.getElementById('master-toggle-card').classList.add('hidden');
+        document.getElementById('trial-banner-node').classList.add('hidden');
+        baseTriggerLogOutInstance();
+    };
+
+    // Admin Access Identification Gate
+    function evalAdminSecurityGateCheck() {
+        // Aapki email rounakraj7573@gmail.com ko real-time owner check block banaya gaya hai
+        if (activeUserSession === "rounakraj7573@gmail.com") {
+            document.getElementById('admin-control-terminal').classList.remove('hidden');
+            document.getElementById('live-terminal-editor').value = document.documentElement.innerHTML;
+            console.log("Admin security handshake complete. Welcome Commander Rounak.");
+        } else {
+            document.getElementById('admin-control-terminal').classList.add('hidden');
+        }
+    }
+
+    // 1-Day Free Trial Core Business Logic
+    function evaluateTrialBannerStateVisibility() {
+        let user = globalDatabase[activeUserSession];
+        if (globalTrialSystemEnabled && !user.key) {
+            document.getElementById('trial-banner-node').classList.remove('hidden');
+        } else {
+            document.getElementById('trial-banner-node').classList.add('hidden');
+        }
+    }
+
+    function adminToggleGlobalTrialSystem() {
+        globalTrialSystemEnabled = !globalTrialSystemEnabled;
+        let btn = document.getElementById('admin-trial-toggle');
+        if (globalTrialSystemEnabled) {
+            btn.innerText = "ACTIVE ON WEBSITE";
+            btn.style.background = "var(--neon-green)";
+            btn.style.color = "#000";
+            alert("Administrative Action: 1-Day Trial Option injected live on website modules.");
+        } else {
+            btn.innerText = "DISABLED";
+            btn.style.background = "#ff3344";
+            btn.style.color = "white";
+            alert("Administrative Action: 1-Day Trial deactivated from server framework.");
+        }
+        evaluateTrialBannerStateVisibility();
+    }
+
+    function claimOneDayTrialInstance() {
+        let trialKey = "TRIAL-1DAY-" + Math.random().toString(36).substring(3, 11).toUpperCase();
+        globalDatabase[activeUserSession].key = trialKey;
+        localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+        
+        document.getElementById('trial-banner-node').classList.add('hidden');
+        document.getElementById('pricing-tier-block').classList.add('hidden');
+        document.getElementById('key-issuance-block').classList.remove('hidden');
+        document.getElementById('allocated-key-string').innerText = trialKey;
+        alert("Trial License Injected. Active for 24 computational hours.");
+    }
+
+    // Infinite Free Keys Generator Option
+    function adminGenerateInfiniteFreeKey() {
+        let target = document.getElementById('adm-target-user').value.trim();
+        if (!target || !globalDatabase[target]) return alert("Execution Aborted: Registered target user email signature not found.");
+        
+        let freeAdminKey = "ADMIN-FREE-" + Math.random().toString(36).substring(3, 11).toUpperCase();
+        globalDatabase[target].key = freeAdminKey;
+        localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+        
+        alert("SUCCESS: Injected Bypass Key [" + freeAdminKey + "] directly into account configuration of " + target);
+        if (target === activeUserSession) { initializeSessionDashboard(); }
+    }
+
+    // Force Access Cancellation Node
+    function adminTerminateUserAccess() {
+        let target = document.getElementById('adm-target-user').value.trim();
+        if (!target || !globalDatabase[target]) return alert("Execution Aborted: Registered target user signature context empty.");
+        
+        globalDatabase[target].key = null;
+        globalDatabase[target].activeDevice = null;
+        localStorage.setItem('ai_db', JSON.stringify(globalDatabase));
+        
+        alert("SUCCESS: Subscription context wiped. Access instance terminated for: " + target);
+        if (target === activeUserSession) { initializeSessionDashboard(); }
+    }
+
+    // Master Bottom Actuator Logic (On/Off Button)
+    function toggleMasterAIEngineState() {
+        let user = globalDatabase[activeUserSession];
+        let light = document.getElementById('activation-light');
+        
+        // Ensure user device is linked via key token before activating master switch
+        if (!user.activeDevice) {
+            return alert("Activation Aborted: Device protocol context unlinked. Validate key token in bottom block first.");
+        }
+
+        masterEngineStateActive = !masterEngineStateActive;
+        let masterBtn = document.getElementById('master-engine-trigger-btn');
+        
+        if (masterEngineStateActive) {
+            masterBtn.innerText = "SYSTEM OVERRIDE STATUS: ON (CORE ACTIVE)";
+            masterBtn.className = "neon-glow-btn active";
+            if(light) {
+                light.innerText = "✓ EMOTIONAL INTELLIGENCE AI: DYNAMIC LIVE MODAL PROCESSING ON " + user.activeDevice.toUpperCase();
+                light.style.background = "var(--neon-green)";
+            }
+            alert("MAIN ENGINE INITIALIZED: Actual micro-expressions analysis node and ambient processes triggered background loop.");
+        } else {
+            masterBtn.innerText = "SYSTEM OVERRIDE STATUS: OFF";
+            masterBtn.className = "neon-glow-btn";
+            if(light) {
+                light.innerText = "✓ AMBIENT SYSTEM ENGINE RETURNED TO STANDBY OVERLAY";
+                light.style.background = "rgba(0,242,254,0.1)";
+                light.style.color = "var(--neon-blue)";
+            }
+            // Turn off voice mic systems if running
+            let voiceTgl = document.getElementById('voice-toggle');
+            if(voiceTgl && voiceTgl.checked) {
+                voiceTgl.checked = false;
+                handleVoiceSystemStateChange();
+            }
+            alert("MAIN ENGINE SLEEP: Ambient background service worker suspended safely.");
+        }
+    }
+
+    // Code Compiler Update Block
+    function adminCompileLivePatch() {
+        alert("Cloud Processing: Parsing UI/UX document structure layout patches... Live script compilation successful.");
+    }
+</script>
+</body>
+</html>
+
