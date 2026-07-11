@@ -1,0 +1,42 @@
+:root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #050508; --card-bg: #0f0f14; }
+body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+.wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding: 10px; position: relative; }
+.hidden { display: none !important; }
+
+.auth-container { background: var(--card-bg); border-radius: 20px; border: 1px solid #1c1c2a; padding: 35px; margin: auto; width: 92%; box-shadow: 0 15px 50px rgba(0,0,0,0.7); box-sizing: border-box; }
+input, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
+.btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; }
+
+.ai-screen-container { width: 100%; height: 280px; background: #000; border: 2px solid #1a1a26; border-radius: 18px; position: relative; display: flex; justify-content: center; align-items: center; margin-top: 10px; overflow: hidden; }
+.gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.9); padding: 6px 14px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
+.avatar-frame { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease-in-out; border-radius: 16px; }
+.active-avatar { opacity: 1; }
+.screen-loader { width: 40px; height: 40px; border: 4px solid #222; border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 0.8s linear infinite; position: absolute; z-index: 5; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.affective-overlay { position: absolute; width: 100%; height: 100%; top:0; left:0; display: flex; align-items:center; justify-content:center; pointer-events: none; }
+.face-geometry-lines { width: 130px; height: 130px; border-radius: 50%; border: 3px solid transparent; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+.face-neutral { border-color: rgba(0, 242, 254, 0.25); box-shadow: 0 0 10px rgba(0, 242, 254, 0.15); }
+.face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: scale(1.05) rotate(-10deg); }
+.face-confused { border-top-color: var(--neon-purple); border-right-color: var(--neon-blue); transform: translateY(-6px) skewX(4deg); }
+.face-anxious { border-color: #ff3344; transform: scale(0.93) translateY(8px); box-shadow: 0 0 12px rgba(255,51,68,0.2); }
+.face-laughing { border-bottom-color: var(--neon-green); border-left-color: var(--neon-green); transform: scale(1.1); box-shadow: 0 0 12px rgba(32,201,151,0.2); }
+
+.chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+.msg-bubble { max-width: 82%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+.msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
+.msg-ai { background: #13131a; color: #e2e2e9; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1f1f2a; }
+
+.input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.media-btn-label { font-size: 20px; cursor: pointer; padding: 8px; color: #666; }
+.chat-text-area { flex: 1; background: transparent; border: none; color: white; padding: 10px; resize: none; height: 42px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+.chat-text-area:focus { outline: none; }
+.send-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+.admin-fullscreen-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; }
+.admin-header { border-bottom: 1px dashed #ff3344; padding-bottom: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+.admin-module-card { background: var(--card-bg); border: 1px solid #222; padding: 18px; border-radius: 12px; margin-bottom: 18px; }
+.admin-btn-close { width: auto; background: #222; padding: 6px 15px; font-size: 12px; margin: 0; border: 1px solid #444; }
+.toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #0b0b0f; padding: 10px; border-radius: 8px; border: 1px solid #1c1c24; }
+.admin-grid-3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
