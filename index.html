@@ -3,69 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affective AI Nexus Portal</title>
+    <title>Emotional Intelligence AI Portal</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <style>
-        :root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #050508; --card-bg: #0f0f14; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
-        .wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding: 10px; position: relative; }
-        .hidden { display: none !important; }
-        
-        .auth-container { background: var(--card-bg); border-radius: 20px; border: 1px solid #1c1c2a; padding: 35px; margin: auto; width: 92%; box-shadow: 0 15px 50px rgba(0,0,0,0.7); box-sizing: border-box; }
-        input, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
-        .btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; }
-
-        .ai-screen-container { width: 100%; height: 280px; background: #000; border: 2px solid #1a1a26; border-radius: 18px; position: relative; display: flex; justify-content: center; align-items: center; margin-top: 10px; overflow: hidden; }
-        .gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.9); padding: 6px 14px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
-        .avatar-frame { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease-in-out; }
-        .active-avatar { opacity: 1; }
-        .screen-loader { width: 40px; height: 40px; border: 4px solid #222; border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 0.8s linear infinite; position: absolute; z-index: 5; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .affective-overlay { position: absolute; width: 100%; height: 100%; top:0; left:0; display: flex; align-items:center; justify-content:center; pointer-events: none; }
-        .face-geometry-lines { width: 120px; height: 120px; border-radius: 50%; border: 3px solid transparent; transition: all 0.3s ease; position: relative; }
-        .face-neutral { border-color: rgba(0, 242, 254, 0.3); box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
-        .face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: rotate(-10deg); }
-        .face-confused { border-top-color: var(--neon-purple); border-right-color: var(--neon-blue); transform: translateY(-5px); }
-        .face-anxious { border-color: #ff3344; transform: scale(0.95); }
-        .face-laughing { border-bottom-color: var(--neon-green); border-left-color: var(--neon-green); transform: scale(1.05); }
-
-        .chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; }
-        .msg-bubble { max-width: 82%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
-        .msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg-ai { background: #13131a; color: #e2e2e9; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1f1f2a; }
-
-        .input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-        .media-btn-label { font-size: 20px; cursor: pointer; padding: 8px; color: #666; }
-        .chat-text-area { flex: 1; background: transparent; border: none; color: white; padding: 10px; resize: none; height: 42px; font-family: inherit; font-size: 14px; }
-        .chat-text-area:focus { outline: none; }
-        .send-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .admin-fullscreen-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; }
-        .admin-header { border-bottom: 1px dashed #ff3344; padding-bottom: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
-        .admin-module-card { background: var(--card-bg); border: 1px solid #222; padding: 18px; border-radius: 12px; margin-bottom: 18px; }
-        .admin-btn-close { width: auto; background: #222; padding: 6px 15px; font-size: 12px; margin: 0; border: 1px solid #444; }
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #0b0b0f; padding: 10px; border-radius: 8px; }
-    </style>
 </head>
 <body>
 
     <div id="auth-gate-screen" class="auth-container">
-        <h2 style="margin-top:0; text-align:center; color:#fff;">Deploy AI Nexus Node</h2>
+        <h2>Deploy AI Core Node</h2>
+        <p style="font-size:12px; color:#666; margin-top:-5px; margin-bottom:20px;">Initialize credentials to configure infrastructure access signatures.</p>
         <input type="text" id="reg-username" placeholder="Enter User Name">
         <input type="password" id="reg-password" placeholder="Set Local Account Password">
-        <input type="email" id="reg-email" placeholder="Enter Gmail ID">
-        <button class="btn-prime" onclick="executeOnboardingDeployment()">Initialize AI Engine</button>
+        <input type="email" id="reg-email" placeholder="Enter Gmail Identification ID">
+        <button class="btn-prime" onclick="executeOnboardingDeployment()">Access AI Core Environment</button>
     </div>
 
     <div id="main-application-interface" class="wrapper hidden">
+        
         <div class="ai-screen-container">
             <div class="gender-toggle-bar" id="gender-btn" onclick="swapModelGenderProtocol()">AVATAR: GIRL</div>
             <div id="screen-loading-spinner" class="screen-loader hidden"></div>
             
-            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Girl Mesh">
-            <img id="avatar-img-boy" class="avatar-frame" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=600&q=80" alt="Boy Mesh">
+            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="https://i.ibb.co/3mNgr3R/girl.png" alt="Girl Avatar">
+            <img id="avatar-img-boy" class="avatar-frame" src="https://i.ibb.co/L5M46P2/boy.png" alt="Boy Avatar">
             
             <div class="affective-overlay">
                 <div id="facial-geometry-node" class="face-geometry-lines face-neutral"></div>
@@ -73,127 +34,43 @@
         </div>
 
         <div class="chat-nodes-log" id="chat-stream-nodes">
-            <div class="msg-bubble msg-ai">System active. Passcode validation node ready. Type your query or command below.</div>
+            <div class="msg-bubble msg-ai">System core validated. Master passcode intercept active. Ask anything or parse conceptual parameters below.</div>
         </div>
 
         <div class="input-dock">
-            <label class="media-btn-label">📎<input type="file" class="hidden" onchange="alert('File buffered.')"></label>
-            <textarea id="chat-input-field" class="chat-text-area" placeholder="Type message or master passcode..."></textarea>
+            <label class="media-btn-label" title="Attach Media Component Node">
+                📎
+                <input type="file" class="hidden" onchange="alert('Media resource stream buffered.')">
+            </label>
+            <textarea id="chat-input-field" class="chat-text-area" placeholder="Ask questions or type situation parameters..."></textarea>
             <button class="send-btn" onclick="transmitUserChatQuery()">➔</button>
         </div>
     </div>
 
     <div id="admin-fullscreen-panel" class="admin-fullscreen-panel hidden">
         <div class="admin-header">
-            <h3 style="color:#ff3344; margin:0;">⚡ OWNER OVERRIDE CONTROL TERMINAL</h3>
-            <button class="admin-btn-close" onclick="document.getElementById('admin-fullscreen-panel').classList.add('hidden')">Exit</button>
+            <h3 style="color:#ff3344; margin:0;">⚡ OWNER EXECUTIVE OVERRIDE TERMINAL</h3>
+            <button class="admin-btn-close" onclick="exitOwnerTerminalPanel()">Exit Terminal</button>
         </div>
+        
         <div class="admin-module-card">
-            <h4 style="color:var(--neon-green); margin:0 0 10px 0;">Global Engine Status</h4>
-            <div class="toggle-row"><span>Laughing Track Matrix</span><button style="background:var(--neon-green); color:#000; font-weight:bold; width:auto; margin:0; padding:5px 10px;">ACTIVE</button></div>
-            <div class="toggle-row"><span>Distress Track Matrix</span><button style="background:var(--neon-green); color:#000; font-weight:bold; width:auto; margin:0; padding:5px 10px;">ACTIVE</button></div>
+            <h4 style="margin-top:0; color:var(--neon-green);">Global Affective System Switches</h4>
+            <div class="toggle-row"><span>Dynamic Expressions Engine Modals:</span><button id="sw-global-emo" onclick="adminToggleGlobalEmotions()" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ALL EMOTIONS: ON</button></div>
         </div>
+
         <div class="admin-module-card">
-            <h4 style="color:#ffc107; margin:0 0 10px 0;">User Operations Registry</h4>
-            <input type="email" placeholder="User Gmail ID" style="margin-top:0;">
-            <button class="btn-prime" onclick="alert('Operation successful.')">Apply Changes</button>
+            <h4 style="margin-top:0; color:#ffc107;">Central Security Profiles Memory Allocation</h4>
+            <input type="email" id="adm-target-user" placeholder="Target user gmail string identification ID" style="margin-top:0;">
+            <input type="text" id="adm-target-name" placeholder="User Profile Name (For adding new instance)" style="margin-top:0;">
+            <div class="admin-grid-3">
+                <button onclick="adminUserDatabaseAction('add')" style="margin:5px 0; background:var(--neon-blue); color:#000; font-weight:bold; font-size:12px;">Add Profile</button>
+                <button onclick="adminUserDatabaseAction('remove')" style="margin:5px 0; background:#ff3344; color:white; font-weight:bold; font-size:12px;">Remove User</button>
+                <button onclick="adminUserDatabaseAction('block')" style="margin:5px 0; background:#df2020; color:white; font-weight:bold; font-size:12px;">Block ID</button>
+                <button onclick="adminUserDatabaseAction('unblock')" style="margin:5px 0; background:var(--neon-green); color:#000; font-weight:bold; font-size:12px;">Unblock ID</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        const firebaseConfig = { apiKey: "AIzaSyDCyw-2JmriCglgsgHnLw2mqX-lRGRUWfG", authDomain: "vertex-7ee6e.firebaseapp.com", projectId: "vertex-7ee6e" };
-        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-
-        let userSessionDb = JSON.parse(localStorage.getItem('ai_session_db')) || null;
-        let activeGenderModel = "girl";
-
-        window.onload = function() {
-            if (userSessionDb) { loadMainInterfaceScreenView(); }
-        };
-
-        function executeOnboardingDeployment() {
-            let name = document.getElementById('reg-username').value.trim();
-            let pass = document.getElementById('reg-password').value.trim();
-            let email = document.getElementById('reg-email').value.trim();
-            if(!name || !pass || !email) return alert("Please fill all fields.");
-
-            userSessionDb = { username: name, password: pass, email: email };
-            localStorage.setItem('ai_session_db', JSON.stringify(userSessionDb));
-            loadMainInterfaceScreenView();
-        }
-
-        function loadMainInterfaceScreenView() {
-            document.getElementById('auth-gate-screen').classList.add('hidden');
-            document.getElementById('main-application-interface').classList.remove('hidden');
-            
-            // Re-map internal repository assets if present locally
-            document.getElementById('avatar-img-girl').src = "2024.webp";
-            document.getElementById('avatar-img-boy').src = "2025.jpg";
-        }
-
-        function swapModelGenderProtocol() {
-            let btn = document.getElementById('gender-btn');
-            let imgG = document.getElementById('avatar-img-girl');
-            let imgB = document.getElementById('avatar-img-boy');
-            if (activeGenderModel === "girl") {
-                activeGenderModel = "boy"; btn.innerText = "AVATAR: BOY";
-                imgG.classList.remove('active-avatar'); imgB.classList.add('active-avatar');
-            } else {
-                activeGenderModel = "girl"; btn.innerText = "AVATAR: GIRL";
-                imgB.classList.remove('active-avatar'); imgG.classList.add('active-avatar');
-            }
-        }
-
-        function transmitUserChatQuery() {
-            let inputField = document.getElementById('chat-input-field');
-            let userQuery = inputField.value.trim();
-            if(!userQuery) return;
-
-            // ⚡ HIGH-PRIORITY ADMIN INTERCEPT GATING
-            if (userQuery === "rounak7573") {
-                inputField.value = "";
-                document.getElementById('admin-fullscreen-panel').classList.remove('hidden');
-                return;
-            }
-
-            // Normal Flow
-            let container = document.getElementById('chat-stream-nodes');
-            let bUser = document.createElement('div'); bUser.className = "msg-bubble msg-user"; bUser.innerText = userQuery;
-            container.appendChild(bUser);
-            inputField.value = "";
-
-            let spinner = document.getElementById('screen-loading-spinner');
-            spinner.classList.remove('hidden');
-
-            let normalizedText = userQuery.toLowerCase();
-            let predictedEmotion = "thinking";
-            let speechResponseText = "Processing calculations through cloud nexus core node layer.";
-
-            if(normalizedText.includes("sad") || normalizedText.includes("ro") || normalizedText.includes("dard")) {
-                predictedEmotion = "anxious"; speechResponseText = "Biomarkers detect a drop in positive telemetry indexes. Syncing recovery waves.";
-            } else if(normalizedText.includes("happy") || normalizedText.includes("haso") || normalizedText.includes("fun")) {
-                predictedEmotion = "laughing"; speechResponseText = "System analysis records highly positive contextual waves. Ha ha!";
-            } else if(normalizedText.includes("explain") || normalizedText.includes("why") || normalizedText.includes("quantum")) {
-                predictedEmotion = "confused"; speechResponseText = "Gathering extensive deep data components to map out this detailed conceptual description model framework.";
-            }
-
-            setTimeout(() => {
-                spinner.classList.add('hidden');
-                document.getElementById('facial-geometry-node').className = "face-geometry-lines face-" + predictedEmotion;
-                let bAi = document.createElement('div'); bAi.className = "msg-bubble msg-ai"; bAi.innerText = speechResponseText;
-                container.appendChild(bAi);
-                container.scrollTop = container.scrollHeight;
-                
-                // Real Acoustic Sound Engine Execution
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    let utterance = new SpeechSynthesisUtterance(speechResponseText);
-                    utterance.pitch = (activeGenderModel === "girl") ? 1.3 : 0.85;
-                    utterance.rate = (predictedEmotion === "anxious") ? 0.8 : 1.0;
-                    window.speechSynthesis.speak(utterance);
-                }
-            }, 1000);
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
