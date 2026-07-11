@@ -7,78 +7,74 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <style>
-        :root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #050508; --card-bg: #0f0f14; --text-muted: #888; }
-        body { font-family: 'SF Pro Display', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+        :root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #050508; --card-bg: #0f0f14; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
         .wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding: 10px; position: relative; }
         .hidden { display: none !important; }
         
-        /* 1. Futuristic Authentication Gateway */
-        .auth-container { background: var(--card-bg); border-radius: 20px; border: 1px solid #1c1c2a; padding: 40px; margin: auto; width: 90%; box-shadow: 0 15px 50px rgba(0,0,0,0.7); box-sizing: border-box; }
-        input, select, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; transition: all 0.2s ease; }
-        input:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 10px rgba(0,242,254,0.1); }
+        /* Registration Gate Layout */
+        .auth-container { background: var(--card-bg); border-radius: 20px; border: 1px solid #1c1c2a; padding: 35px; margin: auto; width: 92%; box-shadow: 0 15px 50px rgba(0,0,0,0.7); box-sizing: border-box; }
+        input, select, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
+        input:focus { border-color: var(--neon-blue); outline: none; }
         .btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; }
 
-        /* 2. Affective Render Face Display Screen (Custom Mesh Rendering) */
+        /* Graphic Human Face Display Screen */
         .ai-screen-container { width: 100%; height: 280px; background: #000; border: 2px solid #1a1a26; border-radius: 18px; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0,242,254,0.05); margin-top: 10px; overflow: hidden; }
+        .gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.9); padding: 6px 14px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
+        .avatar-frame { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease-in-out; }
+        .active-avatar { opacity: 1; }
         .screen-loader { width: 40px; height: 40px; border: 4px solid #222; border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 0.8s linear infinite; position: absolute; z-index: 5; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Gender/Model Toggle Swapper bar */
-        .gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.8); padding: 5px 12px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
 
-        /* High Fidelity Avatar Character Render Meshes (Images replaced emojis) */
-        .avatar-frame { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease-in-out; filter: contrast(1.1) brightness(0.9); }
-        .active-avatar { opacity: 1; }
+        /* Neon Facial Mesh Overlay */
+        .affective-overlay { position: absolute; width: 100%; height: 100%; top:0; left:0; display: flex; align-items:center; justify-content:center; pointer-events: none; }
+        .face-geometry-lines { width: 110px; height: 110px; border-radius: 50%; border: 2px solid transparent; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .face-neutral { border-color: rgba(0, 242, 254, 0.2); box-shadow: 0 0 8px rgba(0, 242, 254, 0.1); }
+        .face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: scale(1.05) rotate(-10deg); }
+        .face-confused { border-top-color: var(--neon-purple); border-right-color: var(--neon-blue); transform: translateY(-5px) skewX(4deg); }
+        .face-anxious { border-color: #ff3344; transform: scale(0.92) translateY(8px); }
+        .face-laughing { border-bottom-color: var(--neon-green); border-left-color: var(--neon-green); transform: scale(1.1); }
 
-        /* Affective Face Geometry Overlay (Facial meshes badalne wala code) */
-        .affective-overlay { position: absolute; width: 100%; height: 100%; top:0; left:0; display: flex; align-items:center; justify-content:center; }
-        .face-geometry-lines { width: 80px; height: 80px; border-radius: 50%; border: 3px solid transparent; transition: all 0.3s ease; position: relative; }
-        .face-neutral { border-color: transparent; }
-        .face-confused { border-top-color: var(--neon-blue); border-left-color: var(--neon-purple); border-width: 5px; transform: scale(1.1) skewX(2deg); }
-        .face-anxious { border-color: rgba(255,255,255,0.4); transform: scale(0.9) translateY(3px); }
-        .face-surprise { border: 6px solid var(--neon-blue); width: 90px; height: 90px; }
-        .face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: rotate(-15deg); }
-        .face-sarcasm { border-right-color: var(--neon-purple); border-width: 4px; transform: skewY(-2deg); }
-
-        /* 3. Advanced Multimedia Chat Transmission Dock */
-        .chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; margin-bottom: 5px; }
-        .msg-bubble { max-width: 80%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
-        .msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        /* Chat Core Logs Components */
+        .chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+        .msg-bubble { max-width: 82%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+        .msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
         .msg-ai { background: #13131a; color: #e2e2e9; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1f1f2a; }
 
-        .input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
-        .media-btn-label { font-size: 20px; cursor: pointer; padding: 8px; color: #666; transition: color 0.2s; }
-        .media-btn-label:hover { color: var(--neon-blue); }
+        .input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); margin-bottom: 5px; }
+        .media-btn-label { font-size: 20px; cursor: pointer; padding: 8px; color: #666; }
         .chat-text-area { flex: 1; background: transparent; border: none; color: white; padding: 10px; resize: none; height: 42px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
         .chat-text-area:focus { outline: none; }
         .send-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
-        /* 4. Root Executive command line overlay Terminal */
-        .admin-fullscreen-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; transition: opacity 0.3s ease; }
+        /* Fullscreen Owner Dashboard Overlay */
+        .admin-fullscreen-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; }
         .admin-header { border-bottom: 1px dashed #ff3344; padding-bottom: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
         .admin-module-card { background: var(--card-bg); border: 1px solid #222; padding: 18px; border-radius: 12px; margin-bottom: 18px; }
         .admin-btn-close { width: auto; background: #222; padding: 6px 15px; font-size: 12px; margin: 0; border: 1px solid #444; cursor: pointer; }
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #0b0b0f; padding: 10px; border-radius: 8px; border: 1px solid #1c1c24; }
+        .admin-grid-3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     </style>
 </head>
 <body>
 
     <div id="auth-gate-screen" class="auth-container">
         <h2 style="margin-top:0; text-align:center; color:#fff;">Deploy AI Nexus Node</h2>
-        <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:-5px; margin-bottom:25px;"> Deploy credentials to configure infrastructure access signatures.</p>
-        <input type="text" id="reg-username" placeholder="Enter Full Name">
-        <input type="password" id="reg-password" placeholder="Set Secure Access Password">
+        <p style="text-align:center; font-size:12px; color:#666; margin-top:-5px; margin-bottom:25px;">Provide configurations setup to map infrastructure profile context.</p>
+        <input type="text" id="reg-username" placeholder="Enter User Name">
+        <input type="password" id="reg-password" placeholder="Set Local Account Password">
         <input type="email" id="reg-email" placeholder="Enter Gmail Identification ID">
-        <button class="btn-prime" onclick="deploySystemAccountNode()"> Initialize Ambient AI environment </button>
+        <button class="btn-prime" onclick="executeOnboardingDeployment()">Initialize Ambient AI Environment</button>
     </div>
 
     <div id="main-application-interface" class="wrapper hidden">
         
         <div class="ai-screen-container">
-            <div class="gender-toggle-bar" id="gender-btn" onclick="swapVirtualHumanModelInstance()">AVATAR: GIRL (MODEL_G)</div>
+            <div class="gender-toggle-bar" id="gender-btn" onclick="swapModelGenderProtocol()">AVATAR: GIRL (MODEL_G)</div>
             <div id="screen-loading-spinner" class="screen-loader hidden"></div>
             
-            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="2024.webp" alt="Model G (Affective Mesh GIRL)">
-            <img id="avatar-img-boy" class="avatar-frame" src="2025.jpg" alt="Model B (Affective Mesh BOY)">
+            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="2024.webp" alt="Model Girl Graphic Face">
+            <img id="avatar-img-boy" class="avatar-frame" src="2025.jpg" alt="Model Boy Graphic Face">
             
             <div class="affective-overlay">
                 <div id="facial-geometry-node" class="face-geometry-lines face-neutral"></div>
@@ -86,15 +82,15 @@
         </div>
 
         <div class="chat-nodes-log" id="chat-stream-nodes">
-            <div class="msg-bubble msg-ai">Network infrastructure synchronized. Gemini Brain initialized. What is the target conceptual query module?</div>
+            <div class="msg-bubble msg-ai">Network infrastructure verified. Master control passcode active. Type query or explanation modules below.</div>
         </div>
 
         <div class="input-dock">
             <label class="media-btn-label" title="Link Media Context File">
                 📎
-                <input type="file" id="media-file-uploader" class="hidden" onchange="handleMultimediaLinkageBuffer(this)">
+                <input type="file" id="media-file-uploader" class="hidden" onchange="triggerMediaBufferFeedback(this)">
             </label>
-            <textarea id="chat-input-field" class="chat-text-area" placeholder="Parse context query or explanation request..."></textarea>
+            <textarea id="chat-input-field" class="chat-text-area" placeholder="Communicate emotion data or queries..."></textarea>
             <button class="send-btn" onclick="transmitUserChatQuery()">➔</button>
         </div>
     </div>
@@ -102,35 +98,32 @@
     <div id="admin-fullscreen-panel" class="admin-fullscreen-panel hidden">
         <div class="admin-header">
             <h3 style="color:#ff3344; margin:0;">⚡ OWNER EXECUTIVE CONTROL OVERRIDE</h3>
-            <button class="admin-btn-close" onclick="exitOwnerTerminalCommandPanel()">Exit Terminal</button>
+            <button class="admin-btn-close" onclick="exitOwnerTerminalPanel()">Exit Terminal</button>
         </div>
         
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:var(--neon-green);">Global Affective Parsing Nodes</h4>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <button onclick="alert('Micro-Expressions Matrix (MESH): ENABLED')" style="margin:0; background:#222; border-color:var(--neon-green);">Facial Mesh: ON</button>
-                <button onclick="alert('Vocal Biomarkers Frequency Node: ENABLED')" style="margin:0; background:#222; border-color:var(--neon-green);">Vocal Matrix: ON</button>
-            </div>
+            <h4 style="margin-top:0; color:var(--neon-green);">Global Emotion Toggles Matrix</h4>
+            <div class="toggle-row"><span>1. Joy / Laughing Engine Switch:</span><button id="sw-laugh" onclick="toggleGlobalEmotionGate('laugh')" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ACTIVE</button></div>
+            <div class="toggle-row"><span>2. Distress / Anxious Engine Switch:</span><button id="sw-anxious" onclick="toggleGlobalEmotionGate('anxious')" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ACTIVE</button></div>
+            <div class="toggle-row"><span>3. Complex / Confused Engine Switch:</span><button id="sw-confused" onclick="toggleGlobalEmotionGate('confused')" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ACTIVE</button></div>
         </div>
 
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:#ffc107;">Persistent User Database Context</h4>
-            <input type="email" id="adm-target-user" placeholder="Target user gmail identification string" style="margin-top:0;">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <button onclick="handleAdminForceAccessInjection()" style="margin:0; background:linear-gradient(45deg, #ffc107, #ff8f00); color:#000; font-weight:bold;">Inject Access Key</button>
-                <button onclick="handleAdminForceRevocation()" style="margin:0; background:#ff3344; color:white; font-weight:bold;">Wipe User Context</button>
+            <h4 style="margin-top:0; color:#ffc107;">Central Database Configuration Registry</h4>
+            <input type="email" id="adm-target-user" placeholder="Target user gmail string ID" style="margin-top:0;">
+            <input type="text" id="adm-target-name" placeholder="User Name (Required only for adding new profiles)" style="margin-top:0;">
+            
+            <div class="admin-grid-3">
+                <button onclick="adminUserDatabaseAction('add')" style="margin:5px 0; background:var(--neon-blue); color:#000; font-weight:bold; font-size:12px;">Add New Profile</button>
+                <button onclick="adminUserDatabaseAction('remove')" style="margin:5px 0; background:#ff3344; color:white; font-weight:bold; font-size:12px;">Remove Context</button>
+                <button onclick="adminUserDatabaseAction('block')" style="margin:5px 0; background:#df2020; color:white; font-weight:bold; font-size:12px;">Block Network ID</button>
+                <button onclick="adminUserDatabaseAction('unblock')" style="margin:5px 0; background:var(--neon-green); color:#000; font-weight:bold; font-size:12px;">Unblock Network ID</button>
             </div>
-        </div>
-        
-        <div class="admin-module-card">
-            <h4 style="margin-top:0; color:var(--neon-blue);">Live Infrastructure Patch Injector (Compiler)</h4>
-            <textarea id="live-code-compiler" style="height:120px; font-family:monospace; background:#050507; color:var(--neon-blue); padding:10px; font-size:11px;"></textarea>
-            <button onclick="alert('Parsing document layout patches... Cloud node compile success.')" class="btn-prime" style="margin-bottom:0; margin-top:12px;">Compile Live Patch</button>
         </div>
     </div>
 
     <script>
-        // Core Project Linkage handshakes
+        // Core Project Identifiers Handshake
         const firebaseConfig = {
             apiKey: "AIzaSyDCyw-2JmriCglgsgHnLw2mqX-lRGRUWfG",
             authDomain: "vertex-7ee6e.firebaseapp.com",
@@ -142,116 +135,122 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
         let userSessionDb = JSON.parse(localStorage.getItem('ai_session_db')) || null;
-        let selectedGenderState = "girl"; // Default avatar matrix
-        
-        // High fidelity audio synthesizer contextual frequencies
-        const audioSynthesizerInstance = new (window.AudioContext || window.webkitAudioContext)();
+        let globalDatabaseMemory = JSON.parse(localStorage.getItem('global_network_users')) || {};
+        let activeGenderModel = "girl"; 
+
+        // Global Admin Config Matrix states
+        let emotionMatrixConfig = { laugh: true, anxious: true, confused: true };
 
         window.onload = function() {
-            if (userSessionDb) { loadMainAffectiveInterfaceScreen(); }
+            if (userSessionDb) { loadMainInterfaceScreenView(); }
         };
 
-        function deploySystemAccountNode() {
-            let uName = document.getElementById('reg-username').value.trim();
-            let uPass = document.getElementById('reg-password').value.trim();
-            let uEmail = document.getElementById('reg-email').value.trim();
-            if(!uName || !uPass || !uEmail) return alert("Validation Exception: Configuration properties empty.");
-            userSessionDb = { username: uName, password: uPass, email: uEmail };
+        function executeOnboardingDeployment() {
+            let name = document.getElementById('reg-username').value.trim();
+            let pass = document.getElementById('reg-password').value.trim();
+            let email = document.getElementById('reg-email').value.trim();
+
+            if(!name || !pass || !email) return alert("Validation Mismatch: Complete onboarding nodes configuration.");
+            
+            if(globalDatabaseMemory[email] && globalDatabaseMemory[email].status === "blocked") {
+                return alert("Access Exception: This network signature is permanently BLOCKED by Company Head.");
+            }
+
+            userSessionDb = { username: name, password: pass, email: email };
             localStorage.setItem('ai_session_db', JSON.stringify(userSessionDb));
-            alert("Infrastructure Signatures Generated. Session node active.");
-            loadMainAffectiveInterfaceScreen();
+            
+            // Sync to local mock database registry
+            if(!globalDatabaseMemory[email]) {
+                globalDatabaseMemory[email] = { name: name, password: pass, status: "active" };
+                localStorage.setItem('global_network_users', JSON.stringify(globalDatabaseMemory));
+            }
+
+            alert("Infrastructure Signatures Generated Successfully.");
+            loadMainInterfaceScreenView();
         }
 
-        function loadMainAffectiveInterfaceScreen() {
+        function loadMainInterfaceScreenView() {
             document.getElementById('auth-gate-screen').classList.add('hidden');
             document.getElementById('main-application-interface').classList.remove('hidden');
         }
 
-        function swapVirtualHumanModelInstance() {
+        function swapModelGenderProtocol() {
             let btn = document.getElementById('gender-btn');
             let imgG = document.getElementById('avatar-img-girl');
             let imgB = document.getElementById('avatar-img-boy');
-            
-            // Replaced emojis with real images swap logic
-            if (selectedGenderState === "girl") {
-                selectedGenderState = "boy";
+
+            if (activeGenderModel === "girl") {
+                activeGenderModel = "boy";
                 btn.innerText = "AVATAR: BOY (MODEL_B)";
                 imgG.classList.remove('active-avatar');
                 imgB.classList.add('active-avatar');
             } else {
-                selectedGenderState = "girl";
+                activeGenderModel = "girl";
                 btn.innerText = "AVATAR: GIRL (MODEL_G)";
                 imgB.classList.remove('active-avatar');
                 imgG.classList.add('active-avatar');
             }
-            updateAffectiveFaceGeometryMatrix("neutral");
+            modifyFacialMeshGeometryOverlay("face-neutral");
         }
 
-        // Facial Mesh Dynamics: Emoji ko hata kar geometry overlay badalne wala engine
-        function updateAffectiveFaceGeometryMatrix(emotionClass) {
-            let meshLinesNode = document.getElementById('facial-geometry-node');
-            meshLinesNode.className = "face-geometry-lines " + emotionClass; // NEON BLUE lines badlengi character par
+        function modifyFacialMeshGeometryOverlay(geometryClass) {
+            document.getElementById('facial-geometry-node').className = "face-geometry-lines " + geometryClass;
         }
 
-        function handleMultimediaLinkageBuffer(input) {
-            if(input.files && input.files[0]) {
-                alert("Media resource linkage buffered: " + input.files[0].name + " parsed into multimedia transmission context.");
-            }
+        function triggerMediaBufferFeedback(input) {
+            if(input.files && input.files[0]) alert("Multimedia resource binary package parsed: " + input.files[0].name);
         }
 
         function transmitUserChatQuery() {
             let inputField = document.getElementById('chat-input-field');
-            let userTextRaw = inputField.value.trim();
-            if(!userTextRaw) return;
+            let userQuery = inputField.value.trim();
+            if(!userQuery) return;
 
-            // ⚡ SECRET GATEWAY: Enter your onboarding password in chat to bypass straight to full root Admin Control Panel
-            if (userSessionDb && userTextRaw === userSessionDb.password) {
+            // Check if current user session is blocked dynamically
+            if(userSessionDb && globalDatabaseMemory[userSessionDb.email] && globalDatabaseMemory[userSessionDb.email].status === "blocked") {
+                alert("Critical Error: Access Denied. Your account is BLOCKED by Administrative console panel.");
                 inputField.value = "";
-                document.getElementById('admin-fullscreen-panel').classList.remove('hidden');
-                document.getElementById('live-code-compiler').value = document.documentElement.innerHTML;
                 return;
             }
 
-            // Append User node log element
-            appendChatNodeLogBubble(userTextRaw, "user");
+            // ⚡ MASTER ADMINISTRATIVE OVERRIDE HANDSHAKE: Enter fix code rounak7573 to bypass directly to terminal window
+            if (userQuery === "rounak7573") {
+                inputField.value = "";
+                document.getElementById('admin-fullscreen-panel').classList.remove('hidden');
+                return;
+            }
+
+            appendChatLogNodeBubble(userQuery, "user");
             inputField.value = "";
 
-            // Trigger Screen Computing state animation overlay
             let spinner = document.getElementById('screen-loading-spinner');
             spinner.classList.remove('hidden');
 
-            // Advanced emotion matrix parsing (Laughed/Cried removed, ALL emotions added based on conceptual explanation context)
-            let lowerText = userTextRaw.toLowerCase();
-            let predictedAffectiveEmotion = "thinking"; // Default mental calculation mode
-            let aiExplanationText = "Parsing infrastructure conceptual variables... Brain node allocating persistent computation context to synthesize accurately valid explanation data modules. Standby for output stream.";
+            let normalizedText = userQuery.toLowerCase();
+            let predictedEmotion = "thinking"; 
+            let speechResponseText = "Analyzing contextual parameter arrays. Syncing variables directly to Gemini cloud core compute nodes.";
 
-            if(lowerText.includes("sad") || lowerText.includes("dard") || lowerText.includes("loss") || lowerText.includes("problem")) {
-                predictedAffectiveEmotion = "anxious";
-                aiExplanationText = "Parsing environmental stress biomarkers map dip matrix. Mental calculation indicates context mismatch. Synthesizing empathetic support vectors.";
-            } else if(lowerText.includes("happy") || lowerText.includes("joke") || lowerText.includes("cool") || lowerText.includes("fun")) {
-                predictedAffectiveEmotion = "laughing";
-                aiExplanationText = "Conceptualizing positive mental parameters map context. Historical memory recall index synced with humorous context vectors loop.";
-            } else if(lowerText.includes("quantum") || lowerText.includes("string theory") || lowerText.includes("explanation") || lowerText.includes("explain")) {
-                predictedAffectiveEmotion = "confused";
-                aiExplanationText = "Core Brain Node allocating extensive computational nodes to parse complicated conceptual explanation matrices. Mental mesh geometry warping tothinking mode protocol. Generating accurately formatted explanation instance context.";
-            } else if(lowerText.includes("sarcasm") || lowerText.includes("taana")) {
-                predictedAffectiveEmotion = "sarcasm";
-                aiExplanationText = "Mental calculation mapping sarcasm context vector index. Historical memory mismatch detected. Mental facial mesh geometry warped to skew status status status status status status";
-            } else if(lowerText.includes("activate system") || lowerText.includes("override")) {
-                predictedAffectiveEmotion = "thinking";
-                aiExplanationText = "Executing administrative command interface protocol vectors. Parsing master actuator context state variables. Ambient system nodes returning standby state loop.";
+            // Core Logic Emotion Filter Gate mapped from Global Admin Switches
+            if((normalizedText.includes("sad") || normalizedText.includes("dard") || normalizedText.includes("ro")) && emotionMatrixConfig.anxious) {
+                predictedEmotion = "anxious";
+                speechResponseText = "Facial mesh analytics tracking traces severe distress curve. Initializing empathetic vocal biomarkers data streams.";
+            } else if((normalizedText.includes("happy") || normalizedText.includes("joke") || normalizedText.includes("fun")) && emotionMatrixConfig.laugh) {
+                predictedEmotion = "laughing";
+                speechResponseText = "Hahaha! Humor context parameters parsed successfully. Your nearby ambient telemetry index is thoroughly positive.";
+            } else if((normalizedText.includes("explain") || normalizedText.includes("quantum") || normalizedText.includes("why")) && emotionMatrixConfig.confused) {
+                predictedEmotion = "confused";
+                speechResponseText = "Core intelligence core allocation active. Processing complex theoretical structures to map out detailed explanation protocols.";
             }
 
-            // Simulate micro-seconds server rountrip roundtrip latency
             setTimeout(() => {
                 spinner.classList.add('hidden');
-                updateAffectiveFaceGeometryMatrix("face-" + predictedAffectiveEmotion); // NEON BLUE geometry badlegi
-                appendChatNodeLogBubble(aiExplanationText, "ai");
-                synthesizeOperationalAudioFrequenciesSpeaker(predictedAffectiveEmotion);
-            }, 1400);
+                modifyFacialMeshGeometryOverlay("face-" + predictedEmotion);
+                appendChatLogNodeBubble(speechResponseText, "ai");
+                executeSpeechSynthesisAcousticOutput(speechResponseText, predictedEmotion);
+            }, 1200);
         }
 
-        function appendChatNodeLogBubble(text, sender) {
+        function appendChatLogNodeBubble(text, sender) {
             let container = document.getElementById('chat-stream-nodes');
             let bubble = document.createElement('div');
             bubble.className = "msg-bubble " + (sender === "user" ? "msg-user" : "msg-ai");
@@ -260,22 +259,85 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // Operational Synthesizer Speaker Frequencies Engine (Real-type real-time sound simulation bina load)
-        function synthesizeOperationalAudioFrequenciesSpeaker(emotion) {
-            try {
-                let osc = audioSynthesizerInstance.createOscillator();
-                let gain = audioSynthesizerInstance.createGain();
-                osc.connect(gain);
-                gain.connect(audioSynthesizerInstance.destination);
+        // Acoustic Vocal Modulation Speech Synthesis Core Engine
+        function executeSpeechSynthesisAcousticOutput(textString, emotionState) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(textString);
+                let availableVoices = window.speechSynthesis.getVoices();
 
-                if (emotion === "thinking") {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(440, audioSynthesizerInstance.currentTime);
-                    osc.frequency.linearRampToValueAtTime(110, audioSynthesizerInstance.currentTime + 0.9);
-                    gain.gain.setValueAtTime(0.3, audioSynthesizerInstance.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioSynthesizerInstance.currentTime + 1.0);
-                    osc.start(); osc.stop(audioSynthesizerInstance.currentTime + 1.0);
-                } else if (emotion === "confused") {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(330, audioSynthesizerInstance.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(110, audioSynthesizerInstance.current
+                if (activeGenderModel === "girl") {
+                    let femaleVoice = availableVoices.find(v => v.name.toLowerCase().includes("female") || v.name.toLowerCase().includes("zira") || v.lang.includes("en-US"));
+                    if(femaleVoice) utterance.voice = femaleVoice;
+                    utterance.pitch = 1.35; 
+                    utterance.rate = 1.05;
+                } else {
+                    let maleVoice = availableVoices.find(v => v.name.toLowerCase().includes("male") || v.name.toLowerCase().includes("david"));
+                    if(maleVoice) utterance.voice = maleVoice;
+                    utterance.pitch = 0.85; 
+                    utterance.rate = 0.95;
+                }
+
+                // Modulation Matrix parameters
+                if (emotionState === "anxious") { utterance.pitch -= 0.2; utterance.rate = 0.78; }
+                else if (emotionState === "laughing") { utterance.pitch += 0.15; utterance.rate = 1.2; }
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        /* Executive Master Admin Actions Engine Modules */
+        function toggleGlobalEmotionGate(emotionType) {
+            emotionMatrixConfig[emotionType] = !emotionMatrixConfig[emotionType];
+            let btn = document.getElementById('sw-' + emotionType);
+            if(emotionMatrixConfig[emotionType]) {
+                btn.innerText = "ACTIVE";
+                btn.style.background = "var(--neon-green)";
+                btn.style.color = "#000";
+            } else {
+                btn.innerText = "DISABLED (MUTED)";
+                btn.style.background = "#ff3344";
+                btn.style.color = "#fff";
+            }
+        }
+
+        function adminUserDatabaseAction(actionType) {
+            let targetEmail = document.getElementById('adm-target-user').value.trim();
+            let targetName = document.getElementById('adm-target-name').value.trim();
+
+            if(!targetEmail) return alert("Operation Halted: Target Gmail address string required.");
+
+            if(actionType === 'add') {
+                if(!targetName) return alert("Name field is mandatory to initialize new account profile.");
+                globalDatabaseMemory[targetEmail] = { name: targetName, password: "AdminGeneratedBypassPass123", status: "active" };
+                alert("Database Success: Injected new user database token node route for: " + targetEmail);
+            } 
+            else if(actionType === 'remove') {
+                if(!globalDatabaseMemory[targetEmail]) return alert("Target context not found in local memory arrays.");
+                delete globalDatabaseMemory[targetEmail];
+                alert("Database Success: Purged account profile from registry instance.");
+            } 
+            else if(actionType === 'block') {
+                if(!globalDatabaseMemory[targetEmail]) {
+                    globalDatabaseMemory[targetEmail] = { name: "Blocked Context", password: "N/A", status: "blocked" };
+                } else {
+                    globalDatabaseMemory[targetEmail].status = "blocked";
+                }
+                alert("Database Success: Protocol status set to BLOCKED for target network ID.");
+            } 
+            else if(actionType === 'unblock') {
+                if(!globalDatabaseMemory[targetEmail]) return alert("Target context mismatch.");
+                globalDatabaseMemory[targetEmail].status = "active";
+                alert("Database Success: Account access unblocked successfully.");
+            }
+
+            localStorage.setItem('global_network_users', JSON.stringify(globalDatabaseMemory));
+            document.getElementById('adm-target-user').value = "";
+            document.getElementById('adm-target-name').value = "";
+        }
+
+        if ('speechSynthesis' in window) { window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); }; }
+        function exitOwnerTerminalPanel() { document.getElementById('admin-fullscreen-panel').classList.add('hidden'); }
+    </script>
+</body>
+</html>
