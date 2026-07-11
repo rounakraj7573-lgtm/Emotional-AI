@@ -3,114 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotional Intelligence AI Portal</title>
+    <title>Affective AI Nexus Portal</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <style>
-        :root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #050508; --card-bg: #0f0f14; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-        
-        .wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; height: 100vh; position: relative; box-sizing: border-box; padding: 10px; }
+        :root { --neon-blue: #00f2fe; --neon-purple: #9b51e0; --neon-green: #20c997; --dark-bg: #050508; --card-bg: #0f0f14; --text-muted: #888; }
+        body { font-family: 'SF Pro Display', Roboto, sans-serif; background-color: var(--dark-bg); color: #e2e2e9; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+        .wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding: 10px; position: relative; }
         .hidden { display: none !important; }
         
-        /* 1. Onboarding Gate Screen Layout */
-        .auth-container { background: var(--card-bg); border-radius: 16px; border: 1px solid #1c1c24; padding: 30px; margin: auto; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.6); box-sizing: border-box; }
-        input, select, button, textarea { width: 100%; padding: 14px; margin: 12px 0; border-radius: 10px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
-        input:focus { border-color: var(--neon-blue); outline: none; }
+        /* 1. Futuristic Authentication Gateway */
+        .auth-container { background: var(--card-bg); border-radius: 20px; border: 1px solid #1c1c2a; padding: 40px; margin: auto; width: 90%; box-shadow: 0 15px 50px rgba(0,0,0,0.7); box-sizing: border-box; }
+        input, select, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; transition: all 0.2s ease; }
+        input:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 10px rgba(0,242,254,0.1); }
         .btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; }
 
-        /* 2. Virtual Human Emotional Face Display Screen */
-        .ai-screen-container { width: 100%; height: 260px; background: #000; border: 2px solid #1a1a26; border-radius: 16px; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0,242,254,0.05); overflow: hidden; margin-top: 10px; }
-        .gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.8); padding: 5px 10px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
-        .avatar-mesh { font-size: 90px; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
-        .screen-loader { width: 40px; height: 40px; border: 4px solid #222; border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 0.8s linear infinite; position: absolute; }
+        /* 2. Affective Render Face Display Screen (Custom Mesh Rendering) */
+        .ai-screen-container { width: 100%; height: 280px; background: #000; border: 2px solid #1a1a26; border-radius: 18px; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0,242,254,0.05); margin-top: 10px; overflow: hidden; }
+        .screen-loader { width: 40px; height: 40px; border: 4px solid #222; border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 0.8s linear infinite; position: absolute; z-index: 5; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* 3. Multimedia Chat Transmission Panel */
-        .chat-history-nodes { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 5px; }
-        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
-        .msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg-ai { background: #13131a; color: #e2e2e9; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1f1f2a; }
         
-        .chat-input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 14px; padding: 8px; display: flex; align-items: center; gap: 8px; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
+        /* Gender/Model Toggle Swapper bar */
+        .gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.8); padding: 5px 12px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
+
+        /* High Fidelity Avatar Character Render Meshes (Images replaced emojis) */
+        .avatar-frame { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease-in-out; filter: contrast(1.1) brightness(0.9); }
+        .active-avatar { opacity: 1; }
+
+        /* Affective Face Geometry Overlay (Facial meshes badalne wala code) */
+        .affective-overlay { position: absolute; width: 100%; height: 100%; top:0; left:0; display: flex; align-items:center; justify-content:center; }
+        .face-geometry-lines { width: 80px; height: 80px; border-radius: 50%; border: 3px solid transparent; transition: all 0.3s ease; position: relative; }
+        .face-neutral { border-color: transparent; }
+        .face-confused { border-top-color: var(--neon-blue); border-left-color: var(--neon-purple); border-width: 5px; transform: scale(1.1) skewX(2deg); }
+        .face-anxious { border-color: rgba(255,255,255,0.4); transform: scale(0.9) translateY(3px); }
+        .face-surprise { border: 6px solid var(--neon-blue); width: 90px; height: 90px; }
+        .face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: rotate(-15deg); }
+        .face-sarcasm { border-right-color: var(--neon-purple); border-width: 4px; transform: skewY(-2deg); }
+
+        /* 3. Advanced Multimedia Chat Transmission Dock */
+        .chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; margin-bottom: 5px; }
+        .msg-bubble { max-width: 80%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+        .msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .msg-ai { background: #13131a; color: #e2e2e9; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1f1f2a; }
+
+        .input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
         .media-btn-label { font-size: 20px; cursor: pointer; padding: 8px; color: #666; transition: color 0.2s; }
         .media-btn-label:hover { color: var(--neon-blue); }
         .chat-text-area { flex: 1; background: transparent; border: none; color: white; padding: 10px; resize: none; height: 42px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
         .chat-text-area:focus { outline: none; }
-        .send-action-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 10px; color: #000; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .send-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
-        /* 4. Super Owner Executive Control Terminal Overlay */
-        .admin-fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; }
-        .admin-header { border-bottom: 1px dashed #ff3344; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .admin-module-card { background: var(--card-bg); border: 1px solid #222; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-        .admin-btn-close { width: auto; background: #222; padding: 5px 15px; font-size: 12px; margin: 0; border: 1px solid #444; }
+        /* 4. Root Executive command line overlay Terminal */
+        .admin-fullscreen-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; transition: opacity 0.3s ease; }
+        .admin-header { border-bottom: 1px dashed #ff3344; padding-bottom: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .admin-module-card { background: var(--card-bg); border: 1px solid #222; padding: 18px; border-radius: 12px; margin-bottom: 18px; }
+        .admin-btn-close { width: auto; background: #222; padding: 6px 15px; font-size: 12px; margin: 0; border: 1px solid #444; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="auth-gate-screen" class="auth-container">
-        <h2 style="margin-top:0; text-align:center; color:#fff;">Initialize Profile</h2>
-        <p style="text-align:center; font-size:12px; color:#666; margin-top:-5px; margin-bottom:20px;">Deploy credentials to map the infrastructure node.</p>
-        <input type="text" id="reg-username" placeholder="Enter User Name">
-        <input type="password" id="reg-password" placeholder="Set Account Password">
+        <h2 style="margin-top:0; text-align:center; color:#fff;">Deploy AI Nexus Node</h2>
+        <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:-5px; margin-bottom:25px;"> Deploy credentials to configure infrastructure access signatures.</p>
+        <input type="text" id="reg-username" placeholder="Enter Full Name">
+        <input type="password" id="reg-password" placeholder="Set Secure Access Password">
         <input type="email" id="reg-email" placeholder="Enter Gmail Identification ID">
-        <button class="btn-prime" onclick="handleUserOnboardingDeployment()">Access AI Core Environment</button>
+        <button class="btn-prime" onclick="deploySystemAccountNode()"> Initialize Ambient AI environment </button>
     </div>
 
     <div id="main-application-interface" class="wrapper hidden">
         
         <div class="ai-screen-container">
-            <div class="gender-toggle-bar" id="gender-btn" onclick="toggleVirtualHumanGenderState()">AVATAR: GIRL</div>
+            <div class="gender-toggle-bar" id="gender-btn" onclick="swapVirtualHumanModelInstance()">AVATAR: GIRL (MODEL_G)</div>
             <div id="screen-loading-spinner" class="screen-loader hidden"></div>
-            <div id="avatar-render-mesh" class="avatar-mesh">👩</div>
+            
+            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="2024.webp" alt="Model G (Affective Mesh GIRL)">
+            <img id="avatar-img-boy" class="avatar-frame" src="2025.jpg" alt="Model B (Affective Mesh BOY)">
+            
+            <div class="affective-overlay">
+                <div id="facial-geometry-node" class="face-geometry-lines face-neutral"></div>
+            </div>
         </div>
 
-        <div class="chat-history-nodes" id="chat-stream-logs">
-            <div class="msg-bubble msg-ai">System initialized. I am scanning environment biomarkers. Speak or upload context modules below.</div>
+        <div class="chat-nodes-log" id="chat-stream-nodes">
+            <div class="msg-bubble msg-ai">Network infrastructure synchronized. Gemini Brain initialized. What is the target conceptual query module?</div>
         </div>
 
-        <div class="chat-input-dock">
-            <label class="media-btn-label" title="Upload Media Context">
+        <div class="input-dock">
+            <label class="media-btn-label" title="Link Media Context File">
                 📎
-                <input type="file" id="media-file-uploader" class="hidden" onchange="handleMultimediaAttachmentInjection(this)">
+                <input type="file" id="media-file-uploader" class="hidden" onchange="handleMultimediaLinkageBuffer(this)">
             </label>
-            <textarea id="chat-input-field" class="chat-text-area" placeholder="Communicate emotion parameters..."></textarea>
-            <button class="send-action-btn" onclick="processUserChatTransmission()">➔</button>
+            <textarea id="chat-input-field" class="chat-text-area" placeholder="Parse context query or explanation request..."></textarea>
+            <button class="send-btn" onclick="transmitUserChatQuery()">➔</button>
         </div>
     </div>
 
-    <div id="admin-fullscreen-panel" class="admin-fullscreen-overlay hidden">
+    <div id="admin-fullscreen-panel" class="admin-fullscreen-panel hidden">
         <div class="admin-header">
             <h3 style="color:#ff3344; margin:0;">⚡ OWNER EXECUTIVE CONTROL OVERRIDE</h3>
-            <button class="admin-btn-close" onclick="exitOwnerTerminalPanel()">Exit Terminal</button>
+            <button class="admin-btn-close" onclick="exitOwnerTerminalCommandPanel()">Exit Terminal</button>
         </div>
         
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:var(--neon-green);">Global Emotion Processing Modals</h4>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="alert('Micro-Expressions Parsing: ENABLED')" style="margin:0; background:#222; border-color:var(--neon-green);">Facial Mesh: ON</button>
-                <button onclick="alert('Vocal Biomarkers Frequency Engine: ENABLED')" style="margin:0; background:#222; border-color:var(--neon-green);">Vocal Matrix: ON</button>
+            <h4 style="margin-top:0; color:var(--neon-green);">Global Affective Parsing Nodes</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <button onclick="alert('Micro-Expressions Matrix (MESH): ENABLED')" style="margin:0; background:#222; border-color:var(--neon-green);">Facial Mesh: ON</button>
+                <button onclick="alert('Vocal Biomarkers Frequency Node: ENABLED')" style="margin:0; background:#222; border-color:var(--neon-green);">Vocal Matrix: ON</button>
             </div>
         </div>
 
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:#ffc107;">Central User Operations Database</h4>
-            <input type="email" id="adm-target-user" placeholder="Target user gmail string context" style="margin-top:0;">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="handleAdminForceKeyInjection()" style="margin:0; background:linear-gradient(45deg, #ffc107, #ff8f00); color:#000; font-weight:bold;">Inject Access Key</button>
-                <button onclick="handleAdminForceCancellation()" style="margin:0; background:#ff3344; color:white; font-weight:bold;">Wipe User Access</button>
+            <h4 style="margin-top:0; color:#ffc107;">Persistent User Database Context</h4>
+            <input type="email" id="adm-target-user" placeholder="Target user gmail identification string" style="margin-top:0;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <button onclick="handleAdminForceAccessInjection()" style="margin:0; background:linear-gradient(45deg, #ffc107, #ff8f00); color:#000; font-weight:bold;">Inject Access Key</button>
+                <button onclick="handleAdminForceRevocation()" style="margin:0; background:#ff3344; color:white; font-weight:bold;">Wipe User Context</button>
             </div>
         </div>
         
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:var(--neon-blue);">Live Infrastructure Patch Injector</h4>
+            <h4 style="margin-top:0; color:var(--neon-blue);">Live Infrastructure Patch Injector (Compiler)</h4>
             <textarea id="live-code-compiler" style="height:120px; font-family:monospace; background:#050507; color:var(--neon-blue); padding:10px; font-size:11px;"></textarea>
-            <button onclick="alert('Compilation complete. Global nodes synchronized.')" class="btn-prime" style="margin-bottom:0; margin-top:10px;">Compile Infrastructure Patch</button>
+            <button onclick="alert('Parsing document layout patches... Cloud node compile success.')" class="btn-prime" style="margin-bottom:0; margin-top:12px;">Compile Live Patch</button>
         </div>
     </div>
 
     <script>
-        // Core Project Configurations Link Gate
+        // Core Project Linkage handshakes
         const firebaseConfig = {
             apiKey: "AIzaSyDCyw-2JmriCglgsgHnLw2mqX-lRGRUWfG",
             authDomain: "vertex-7ee6e.firebaseapp.com",
@@ -121,152 +141,141 @@
         };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
-        let localUserMemoryDb = JSON.parse(localStorage.getItem('ai_user_db')) || null;
-        let selectedGenderState = "girl"; // Default rendering matrix mode
+        let userSessionDb = JSON.parse(localStorage.getItem('ai_session_db')) || null;
+        let selectedGenderState = "girl"; // Default avatar matrix
         
-        // Custom Audio Synthesis Vectors (High fidelity crying/laughing simulation frequencies)
-        const audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
+        // High fidelity audio synthesizer contextual frequencies
+        const audioSynthesizerInstance = new (window.AudioContext || window.webkitAudioContext)();
 
         window.onload = function() {
-            if (localUserMemoryDb) {
-                loadMainVirtualInterfaceScreen();
-            }
+            if (userSessionDb) { loadMainAffectiveInterfaceScreen(); }
         };
 
-        function handleUserOnboardingDeployment() {
+        function deploySystemAccountNode() {
             let uName = document.getElementById('reg-username').value.trim();
             let uPass = document.getElementById('reg-password').value.trim();
             let uEmail = document.getElementById('reg-email').value.trim();
-
-            if(!uName || !uPass || !uEmail) return alert("Onboarding Exception: Configuration variables empty.");
-
-            localUserMemoryDb = { username: uName, password: uPass, email: uEmail };
-            localStorage.setItem('ai_user_db', JSON.stringify(localUserMemoryDb));
-            
-            alert("Infrastructure Account Signatures Parsed Successfully.");
-            loadMainVirtualInterfaceScreen();
+            if(!uName || !uPass || !uEmail) return alert("Validation Exception: Configuration properties empty.");
+            userSessionDb = { username: uName, password: uPass, email: uEmail };
+            localStorage.setItem('ai_session_db', JSON.stringify(userSessionDb));
+            alert("Infrastructure Signatures Generated. Session node active.");
+            loadMainAffectiveInterfaceScreen();
         }
 
-        function loadMainVirtualInterfaceScreen() {
+        function loadMainAffectiveInterfaceScreen() {
             document.getElementById('auth-gate-screen').classList.add('hidden');
             document.getElementById('main-application-interface').classList.remove('hidden');
-            updateAvatarRenderMeshBasedOnEmotion("neutral");
         }
 
-        function toggleVirtualHumanGenderState() {
+        function swapVirtualHumanModelInstance() {
             let btn = document.getElementById('gender-btn');
+            let imgG = document.getElementById('avatar-img-girl');
+            let imgB = document.getElementById('avatar-img-boy');
+            
+            // Replaced emojis with real images swap logic
             if (selectedGenderState === "girl") {
                 selectedGenderState = "boy";
-                btn.innerText = "AVATAR: BOY";
+                btn.innerText = "AVATAR: BOY (MODEL_B)";
+                imgG.classList.remove('active-avatar');
+                imgB.classList.add('active-avatar');
             } else {
                 selectedGenderState = "girl";
-                btn.innerText = "AVATAR: GIRL";
+                btn.innerText = "AVATAR: GIRL (MODEL_G)";
+                imgB.classList.remove('active-avatar');
+                imgG.classList.add('active-avatar');
             }
-            updateAvatarRenderMeshBasedOnEmotion("neutral");
+            updateAffectiveFaceGeometryMatrix("neutral");
         }
 
-        function updateAvatarRenderMeshBasedOnEmotion(emotion) {
-            let mesh = document.getElementById('avatar-render-mesh');
-            if (selectedGenderState === "girl") {
-                if(emotion === "happy" || emotion === "laughing") mesh.innerText = "😀👩";
-                else if(emotion === "sad" || emotion === "crying") mesh.innerText = "😭👩";
-                else mesh.innerText = "👩";
-            } else {
-                if(emotion === "happy" || emotion === "laughing") mesh.innerText = "😀👨";
-                else if(emotion === "sad" || emotion === "crying") mesh.innerText = "😭👨";
-                else mesh.innerText = "👨";
-            }
+        // Facial Mesh Dynamics: Emoji ko hata kar geometry overlay badalne wala engine
+        function updateAffectiveFaceGeometryMatrix(emotionClass) {
+            let meshLinesNode = document.getElementById('facial-geometry-node');
+            meshLinesNode.className = "face-geometry-lines " + emotionClass; // NEON BLUE lines badlengi character par
         }
 
-        function handleMultimediaAttachmentInjection(input) {
+        function handleMultimediaLinkageBuffer(input) {
             if(input.files && input.files[0]) {
-                alert("Media Resource Node Linked: " + input.files[0].name + " injected into streaming buffer buffer.");
+                alert("Media resource linkage buffered: " + input.files[0].name + " parsed into multimedia transmission context.");
             }
         }
 
-        function processUserChatTransmission() {
+        function transmitUserChatQuery() {
             let inputField = document.getElementById('chat-input-field');
-            let queryText = inputField.value.trim();
-            if(!queryText) return;
+            let userTextRaw = inputField.value.trim();
+            if(!userTextRaw) return;
 
-            // ⚡ SECRET SECURITY GATEWAY: Match Registered Password to Bypass straight to Admin Terminal Panel
-            if (localUserMemoryDb && queryText === localUserMemoryDb.password) {
+            // ⚡ SECRET GATEWAY: Enter your onboarding password in chat to bypass straight to full root Admin Control Panel
+            if (userSessionDb && userTextRaw === userSessionDb.password) {
                 inputField.value = "";
                 document.getElementById('admin-fullscreen-panel').classList.remove('hidden');
                 document.getElementById('live-code-compiler').value = document.documentElement.innerHTML;
                 return;
             }
 
-            // Append User Chat Node Bubble
-            appendChatBubbleLogElement(queryText, "user");
+            // Append User node log element
+            appendChatNodeLogBubble(userTextRaw, "user");
             inputField.value = "";
 
-            // Trigger Face Rendering Screen Computing Animation
+            // Trigger Screen Computing state animation overlay
             let spinner = document.getElementById('screen-loading-spinner');
             spinner.classList.remove('hidden');
 
-            // Parse text content properties to dynamically predict simulated target output emotions
-            let lowerText = queryText.toLowerCase();
-            let predictedEmotion = "happy";
-            let responseText = "Processing affective vectors. Your emotional patterns are logged parameters inside the matrix system.";
+            // Advanced emotion matrix parsing (Laughed/Cried removed, ALL emotions added based on conceptual explanation context)
+            let lowerText = userTextRaw.toLowerCase();
+            let predictedAffectiveEmotion = "thinking"; // Default mental calculation mode
+            let aiExplanationText = "Parsing infrastructure conceptual variables... Brain node allocating persistent computation context to synthesize accurately valid explanation data modules. Standby for output stream.";
 
-            if(lowerText.includes("sad") || lowerText.includes("cry") || lowerText.includes("ro") || lowerText.includes("dard")) {
-                predictedEmotion = "crying";
-                responseText = "Biomarkers indicate severe stress matrix dip. Synthesizing empathetic validation sound frequencies node...";
-            } else if(lowerText.includes("smile") || lowerText.includes("happy") || lowerText.includes("joke") || lowerText.includes("fun")) {
-                predictedEmotion = "laughing";
-                responseText = "Positive vocal Biomarkers mapping active. Laughing algorithm matching frequency loop.";
+            if(lowerText.includes("sad") || lowerText.includes("dard") || lowerText.includes("loss") || lowerText.includes("problem")) {
+                predictedAffectiveEmotion = "anxious";
+                aiExplanationText = "Parsing environmental stress biomarkers map dip matrix. Mental calculation indicates context mismatch. Synthesizing empathetic support vectors.";
+            } else if(lowerText.includes("happy") || lowerText.includes("joke") || lowerText.includes("cool") || lowerText.includes("fun")) {
+                predictedAffectiveEmotion = "laughing";
+                aiExplanationText = "Conceptualizing positive mental parameters map context. Historical memory recall index synced with humorous context vectors loop.";
+            } else if(lowerText.includes("quantum") || lowerText.includes("string theory") || lowerText.includes("explanation") || lowerText.includes("explain")) {
+                predictedAffectiveEmotion = "confused";
+                aiExplanationText = "Core Brain Node allocating extensive computational nodes to parse complicated conceptual explanation matrices. Mental mesh geometry warping tothinking mode protocol. Generating accurately formatted explanation instance context.";
+            } else if(lowerText.includes("sarcasm") || lowerText.includes("taana")) {
+                predictedAffectiveEmotion = "sarcasm";
+                aiExplanationText = "Mental calculation mapping sarcasm context vector index. Historical memory mismatch detected. Mental facial mesh geometry warped to skew status status status status status status";
+            } else if(lowerText.includes("activate system") || lowerText.includes("override")) {
+                predictedAffectiveEmotion = "thinking";
+                aiExplanationText = "Executing administrative command interface protocol vectors. Parsing master actuator context state variables. Ambient system nodes returning standby state loop.";
             }
 
-            // Simulate micro-seconds server response roundtrip latency
+            // Simulate micro-seconds server rountrip roundtrip latency
             setTimeout(() => {
                 spinner.classList.add('hidden');
-                updateAvatarRenderMeshBasedOnEmotion(predictedEmotion);
-                appendChatBubbleLogElement(responseText, "ai");
-                synthesizeRealTimeEmotionFrequenciesSpeakerAudio(predictedEmotion);
-            }, 1200);
+                updateAffectiveFaceGeometryMatrix("face-" + predictedAffectiveEmotion); // NEON BLUE geometry badlegi
+                appendChatNodeLogBubble(aiExplanationText, "ai");
+                synthesizeOperationalAudioFrequenciesSpeaker(predictedAffectiveEmotion);
+            }, 1400);
         }
 
-        function appendChatBubbleLogElement(text, sender) {
-            let logsContainer = document.getElementById('chat-stream-logs');
+        function appendChatNodeLogBubble(text, sender) {
+            let container = document.getElementById('chat-stream-nodes');
             let bubble = document.createElement('div');
             bubble.className = "msg-bubble " + (sender === "user" ? "msg-user" : "msg-ai");
             bubble.innerText = text;
-            logsContainer.appendChild(bubble);
-            logsContainer.scrollTop = logsContainer.scrollHeight;
+            container.appendChild(bubble);
+            container.scrollTop = container.scrollHeight;
         }
 
-        // High Fidelity Synthesizer Speaker Nodes Engine (Bina phone hardware load kiye sound wave generate karna)
-        function synthesizeRealTimeEmotionFrequenciesSpeakerAudio(emotion) {
+        // Operational Synthesizer Speaker Frequencies Engine (Real-type real-time sound simulation bina load)
+        function synthesizeOperationalAudioFrequenciesSpeaker(emotion) {
             try {
-                let osc = audioContextInstance.createOscillator();
-                let gain = audioContextInstance.createGain();
+                let osc = audioSynthesizerInstance.createOscillator();
+                let gain = audioSynthesizerInstance.createGain();
                 osc.connect(gain);
-                gain.connect(audioContextInstance.destination);
+                gain.connect(audioSynthesizerInstance.destination);
 
-                if (emotion === "laughing") {
-                    // High pitch frequency modulations simulating laugh ripples
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, audioContextInstance.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, audioContextInstance.currentTime + 0.3);
-                    gain.gain.setValueAtTime(0.3, audioContextInstance.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioContextInstance.currentTime + 0.4);
-                    osc.start(); osc.stop(audioContextInstance.currentTime + 0.4);
-                } else if (emotion === "crying") {
-                    // Soft low frequency downward trembles simulating deep distress cry arcs
+                if (emotion === "thinking") {
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(220, audioContextInstance.currentTime);
-                    osc.frequency.linearRampToValueAtTime(110, audioContextInstance.currentTime + 0.6);
-                    gain.gain.setValueAtTime(0.2, audioContextInstance.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioContextInstance.currentTime + 0.7);
-                    osc.start(); osc.stop(audioContextInstance.currentTime + 0.7);
-                }
-            } catch(e) { console.log("Audio contextual initialization standby block state."); }
-        }
-
-        function exitOwnerTerminalPanel() { document.getElementById('admin-fullscreen-panel').classList.add('hidden'); }
-        function handleAdminForceKeyInjection() { alert("Administrative Action: Secure free key token parsed to user profile context block."); }
-        function handleAdminForceCancellation() { alert("Administrative Action: User infrastructure session status wiped from local matrix db."); }
-    </script>
-</body>
-</html>
+                    osc.frequency.setValueAtTime(440, audioSynthesizerInstance.currentTime);
+                    osc.frequency.linearRampToValueAtTime(110, audioSynthesizerInstance.currentTime + 0.9);
+                    gain.gain.setValueAtTime(0.3, audioSynthesizerInstance.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioSynthesizerInstance.currentTime + 1.0);
+                    osc.start(); osc.stop(audioSynthesizerInstance.currentTime + 1.0);
+                } else if (emotion === "confused") {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(330, audioSynthesizerInstance.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(110, audioSynthesizerInstance.current
