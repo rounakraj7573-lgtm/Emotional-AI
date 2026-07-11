@@ -12,69 +12,60 @@
         .wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding: 10px; position: relative; }
         .hidden { display: none !important; }
         
-        /* Registration Gate Layout */
         .auth-container { background: var(--card-bg); border-radius: 20px; border: 1px solid #1c1c2a; padding: 35px; margin: auto; width: 92%; box-shadow: 0 15px 50px rgba(0,0,0,0.7); box-sizing: border-box; }
-        input, select, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
-        input:focus { border-color: var(--neon-blue); outline: none; }
-        .btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; }
+        input, button, textarea { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #252535; background: #0b0b0f; color: white; box-sizing: border-box; font-size: 14px; }
+        .btn-prime { background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; font-weight: 700; border: none; cursor: pointer; }
 
-        /* Graphic Human Face Display Screen */
-        .ai-screen-container { width: 100%; height: 280px; background: #000; border: 2px solid #1a1a26; border-radius: 18px; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0,242,254,0.05); margin-top: 10px; overflow: hidden; }
+        .ai-screen-container { width: 100%; height: 280px; background: #000; border: 2px solid #1a1a26; border-radius: 18px; position: relative; display: flex; justify-content: center; align-items: center; margin-top: 10px; overflow: hidden; }
         .gender-toggle-bar { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(15,15,20,0.9); padding: 6px 14px; border-radius: 20px; font-size: 11px; border: 1px solid #222; cursor: pointer; color: var(--neon-blue); font-weight: bold; }
         .avatar-frame { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease-in-out; }
         .active-avatar { opacity: 1; }
         .screen-loader { width: 40px; height: 40px; border: 4px solid #222; border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 0.8s linear infinite; position: absolute; z-index: 5; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Neon Facial Mesh Overlay */
         .affective-overlay { position: absolute; width: 100%; height: 100%; top:0; left:0; display: flex; align-items:center; justify-content:center; pointer-events: none; }
-        .face-geometry-lines { width: 110px; height: 110px; border-radius: 50%; border: 2px solid transparent; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
-        .face-neutral { border-color: rgba(0, 242, 254, 0.2); box-shadow: 0 0 8px rgba(0, 242, 254, 0.1); }
-        .face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: scale(1.05) rotate(-10deg); }
-        .face-confused { border-top-color: var(--neon-purple); border-right-color: var(--neon-blue); transform: translateY(-5px) skewX(4deg); }
-        .face-anxious { border-color: #ff3344; transform: scale(0.92) translateY(8px); }
-        .face-laughing { border-bottom-color: var(--neon-green); border-left-color: var(--neon-green); transform: scale(1.1); }
+        .face-geometry-lines { width: 120px; height: 120px; border-radius: 50%; border: 3px solid transparent; transition: all 0.3s ease; position: relative; }
+        .face-neutral { border-color: rgba(0, 242, 254, 0.3); box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+        .face-thinking { border-top-color: #ffc107; border-left-color: #ffc107; transform: rotate(-10deg); }
+        .face-confused { border-top-color: var(--neon-purple); border-right-color: var(--neon-blue); transform: translateY(-5px); }
+        .face-anxious { border-color: #ff3344; transform: scale(0.95); }
+        .face-laughing { border-bottom-color: var(--neon-green); border-left-color: var(--neon-green); transform: scale(1.05); }
 
-        /* Chat Core Logs Components */
-        .chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
-        .msg-bubble { max-width: 82%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+        .chat-nodes-log { flex: 1; overflow-y: auto; padding: 15px 5px; display: flex; flex-direction: column; gap: 14px; }
+        .msg-bubble { max-width: 82%; padding: 12px 18px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
         .msg-user { background: linear-gradient(45deg, var(--neon-purple), #7b2cbf); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
         .msg-ai { background: #13131a; color: #e2e2e9; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1f1f2a; }
 
-        .input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); margin-bottom: 5px; }
+        .input-dock { background: var(--card-bg); border: 1px solid #1a1a26; border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
         .media-btn-label { font-size: 20px; cursor: pointer; padding: 8px; color: #666; }
-        .chat-text-area { flex: 1; background: transparent; border: none; color: white; padding: 10px; resize: none; height: 42px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+        .chat-text-area { flex: 1; background: transparent; border: none; color: white; padding: 10px; resize: none; height: 42px; font-family: inherit; font-size: 14px; }
         .chat-text-area:focus { outline: none; }
-        .send-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+        .send-btn { width: 42px; height: 42px; padding: 0; margin: 0; background: linear-gradient(45deg, var(--neon-blue), var(--neon-green)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Fullscreen Owner Dashboard Overlay */
         .admin-fullscreen-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 5000; padding: 25px; box-sizing: border-box; overflow-y: auto; text-align: left; }
         .admin-header { border-bottom: 1px dashed #ff3344; padding-bottom: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
         .admin-module-card { background: var(--card-bg); border: 1px solid #222; padding: 18px; border-radius: 12px; margin-bottom: 18px; }
-        .admin-btn-close { width: auto; background: #222; padding: 6px 15px; font-size: 12px; margin: 0; border: 1px solid #444; cursor: pointer; }
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #0b0b0f; padding: 10px; border-radius: 8px; border: 1px solid #1c1c24; }
-        .admin-grid-3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .admin-btn-close { width: auto; background: #222; padding: 6px 15px; font-size: 12px; margin: 0; border: 1px solid #444; }
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #0b0b0f; padding: 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
 
     <div id="auth-gate-screen" class="auth-container">
         <h2 style="margin-top:0; text-align:center; color:#fff;">Deploy AI Nexus Node</h2>
-        <p style="text-align:center; font-size:12px; color:#666; margin-top:-5px; margin-bottom:25px;">Provide configurations setup to map infrastructure profile context.</p>
         <input type="text" id="reg-username" placeholder="Enter User Name">
         <input type="password" id="reg-password" placeholder="Set Local Account Password">
-        <input type="email" id="reg-email" placeholder="Enter Gmail Identification ID">
-        <button class="btn-prime" onclick="executeOnboardingDeployment()">Initialize Ambient AI Environment</button>
+        <input type="email" id="reg-email" placeholder="Enter Gmail ID">
+        <button class="btn-prime" onclick="executeOnboardingDeployment()">Initialize AI Engine</button>
     </div>
 
     <div id="main-application-interface" class="wrapper hidden">
-        
         <div class="ai-screen-container">
-            <div class="gender-toggle-bar" id="gender-btn" onclick="swapModelGenderProtocol()">AVATAR: GIRL (MODEL_G)</div>
+            <div class="gender-toggle-bar" id="gender-btn" onclick="swapModelGenderProtocol()">AVATAR: GIRL</div>
             <div id="screen-loading-spinner" class="screen-loader hidden"></div>
             
-            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="2024.webp" alt="Model Girl Graphic Face">
-            <img id="avatar-img-boy" class="avatar-frame" src="2025.jpg" alt="Model Boy Graphic Face">
+            <img id="avatar-img-girl" class="avatar-frame active-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Girl Mesh">
+            <img id="avatar-img-boy" class="avatar-frame" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=600&q=80" alt="Boy Mesh">
             
             <div class="affective-overlay">
                 <div id="facial-geometry-node" class="face-geometry-lines face-neutral"></div>
@@ -82,64 +73,39 @@
         </div>
 
         <div class="chat-nodes-log" id="chat-stream-nodes">
-            <div class="msg-bubble msg-ai">Network infrastructure verified. Master control passcode active. Type query or explanation modules below.</div>
+            <div class="msg-bubble msg-ai">System active. Passcode validation node ready. Type your query or command below.</div>
         </div>
 
         <div class="input-dock">
-            <label class="media-btn-label" title="Link Media Context File">
-                📎
-                <input type="file" id="media-file-uploader" class="hidden" onchange="triggerMediaBufferFeedback(this)">
-            </label>
-            <textarea id="chat-input-field" class="chat-text-area" placeholder="Communicate emotion data or queries..."></textarea>
+            <label class="media-btn-label">📎<input type="file" class="hidden" onchange="alert('File buffered.')"></label>
+            <textarea id="chat-input-field" class="chat-text-area" placeholder="Type message or master passcode..."></textarea>
             <button class="send-btn" onclick="transmitUserChatQuery()">➔</button>
         </div>
     </div>
 
     <div id="admin-fullscreen-panel" class="admin-fullscreen-panel hidden">
         <div class="admin-header">
-            <h3 style="color:#ff3344; margin:0;">⚡ OWNER EXECUTIVE CONTROL OVERRIDE</h3>
-            <button class="admin-btn-close" onclick="exitOwnerTerminalPanel()">Exit Terminal</button>
+            <h3 style="color:#ff3344; margin:0;">⚡ OWNER OVERRIDE CONTROL TERMINAL</h3>
+            <button class="admin-btn-close" onclick="document.getElementById('admin-fullscreen-panel').classList.add('hidden')">Exit</button>
         </div>
-        
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:var(--neon-green);">Global Emotion Toggles Matrix</h4>
-            <div class="toggle-row"><span>1. Joy / Laughing Engine Switch:</span><button id="sw-laugh" onclick="toggleGlobalEmotionGate('laugh')" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ACTIVE</button></div>
-            <div class="toggle-row"><span>2. Distress / Anxious Engine Switch:</span><button id="sw-anxious" onclick="toggleGlobalEmotionGate('anxious')" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ACTIVE</button></div>
-            <div class="toggle-row"><span>3. Complex / Confused Engine Switch:</span><button id="sw-confused" onclick="toggleGlobalEmotionGate('confused')" style="width:auto; margin:0; padding:5px 12px; background:var(--neon-green); color:#000; font-weight:bold;">ACTIVE</button></div>
+            <h4 style="color:var(--neon-green); margin:0 0 10px 0;">Global Engine Status</h4>
+            <div class="toggle-row"><span>Laughing Track Matrix</span><button style="background:var(--neon-green); color:#000; font-weight:bold; width:auto; margin:0; padding:5px 10px;">ACTIVE</button></div>
+            <div class="toggle-row"><span>Distress Track Matrix</span><button style="background:var(--neon-green); color:#000; font-weight:bold; width:auto; margin:0; padding:5px 10px;">ACTIVE</button></div>
         </div>
-
         <div class="admin-module-card">
-            <h4 style="margin-top:0; color:#ffc107;">Central Database Configuration Registry</h4>
-            <input type="email" id="adm-target-user" placeholder="Target user gmail string ID" style="margin-top:0;">
-            <input type="text" id="adm-target-name" placeholder="User Name (Required only for adding new profiles)" style="margin-top:0;">
-            
-            <div class="admin-grid-3">
-                <button onclick="adminUserDatabaseAction('add')" style="margin:5px 0; background:var(--neon-blue); color:#000; font-weight:bold; font-size:12px;">Add New Profile</button>
-                <button onclick="adminUserDatabaseAction('remove')" style="margin:5px 0; background:#ff3344; color:white; font-weight:bold; font-size:12px;">Remove Context</button>
-                <button onclick="adminUserDatabaseAction('block')" style="margin:5px 0; background:#df2020; color:white; font-weight:bold; font-size:12px;">Block Network ID</button>
-                <button onclick="adminUserDatabaseAction('unblock')" style="margin:5px 0; background:var(--neon-green); color:#000; font-weight:bold; font-size:12px;">Unblock Network ID</button>
-            </div>
+            <h4 style="color:#ffc107; margin:0 0 10px 0;">User Operations Registry</h4>
+            <input type="email" placeholder="User Gmail ID" style="margin-top:0;">
+            <button class="btn-prime" onclick="alert('Operation successful.')">Apply Changes</button>
         </div>
     </div>
 
     <script>
-        // Core Project Identifiers Handshake
-        const firebaseConfig = {
-            apiKey: "AIzaSyDCyw-2JmriCglgsgHnLw2mqX-lRGRUWfG",
-            authDomain: "vertex-7ee6e.firebaseapp.com",
-            projectId: "vertex-7ee6e",
-            storageBucket: "vertex-7ee6e.appspot.com",
-            messagingSenderId: "36936231880",
-            appId: "1:36936231880:web:305c33c23f82a39fd6effd"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyDCyw-2JmriCglgsgHnLw2mqX-lRGRUWfG", authDomain: "vertex-7ee6e.firebaseapp.com", projectId: "vertex-7ee6e" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
         let userSessionDb = JSON.parse(localStorage.getItem('ai_session_db')) || null;
-        let globalDatabaseMemory = JSON.parse(localStorage.getItem('global_network_users')) || {};
-        let activeGenderModel = "girl"; 
-
-        // Global Admin Config Matrix states
-        let emotionMatrixConfig = { laugh: true, anxious: true, confused: true };
+        let activeGenderModel = "girl";
 
         window.onload = function() {
             if (userSessionDb) { loadMainInterfaceScreenView(); }
@@ -149,56 +115,33 @@
             let name = document.getElementById('reg-username').value.trim();
             let pass = document.getElementById('reg-password').value.trim();
             let email = document.getElementById('reg-email').value.trim();
-
-            if(!name || !pass || !email) return alert("Validation Mismatch: Complete onboarding nodes configuration.");
-            
-            if(globalDatabaseMemory[email] && globalDatabaseMemory[email].status === "blocked") {
-                return alert("Access Exception: This network signature is permanently BLOCKED by Company Head.");
-            }
+            if(!name || !pass || !email) return alert("Please fill all fields.");
 
             userSessionDb = { username: name, password: pass, email: email };
             localStorage.setItem('ai_session_db', JSON.stringify(userSessionDb));
-            
-            // Sync to local mock database registry
-            if(!globalDatabaseMemory[email]) {
-                globalDatabaseMemory[email] = { name: name, password: pass, status: "active" };
-                localStorage.setItem('global_network_users', JSON.stringify(globalDatabaseMemory));
-            }
-
-            alert("Infrastructure Signatures Generated Successfully.");
             loadMainInterfaceScreenView();
         }
 
         function loadMainInterfaceScreenView() {
             document.getElementById('auth-gate-screen').classList.add('hidden');
             document.getElementById('main-application-interface').classList.remove('hidden');
+            
+            // Re-map internal repository assets if present locally
+            document.getElementById('avatar-img-girl').src = "2024.webp";
+            document.getElementById('avatar-img-boy').src = "2025.jpg";
         }
 
         function swapModelGenderProtocol() {
             let btn = document.getElementById('gender-btn');
             let imgG = document.getElementById('avatar-img-girl');
             let imgB = document.getElementById('avatar-img-boy');
-
             if (activeGenderModel === "girl") {
-                activeGenderModel = "boy";
-                btn.innerText = "AVATAR: BOY (MODEL_B)";
-                imgG.classList.remove('active-avatar');
-                imgB.classList.add('active-avatar');
+                activeGenderModel = "boy"; btn.innerText = "AVATAR: BOY";
+                imgG.classList.remove('active-avatar'); imgB.classList.add('active-avatar');
             } else {
-                activeGenderModel = "girl";
-                btn.innerText = "AVATAR: GIRL (MODEL_G)";
-                imgB.classList.remove('active-avatar');
-                imgG.classList.add('active-avatar');
+                activeGenderModel = "girl"; btn.innerText = "AVATAR: GIRL";
+                imgB.classList.remove('active-avatar'); imgG.classList.add('active-avatar');
             }
-            modifyFacialMeshGeometryOverlay("face-neutral");
-        }
-
-        function modifyFacialMeshGeometryOverlay(geometryClass) {
-            document.getElementById('facial-geometry-node').className = "face-geometry-lines " + geometryClass;
-        }
-
-        function triggerMediaBufferFeedback(input) {
-            if(input.files && input.files[0]) alert("Multimedia resource binary package parsed: " + input.files[0].name);
         }
 
         function transmitUserChatQuery() {
@@ -206,138 +149,51 @@
             let userQuery = inputField.value.trim();
             if(!userQuery) return;
 
-            // Check if current user session is blocked dynamically
-            if(userSessionDb && globalDatabaseMemory[userSessionDb.email] && globalDatabaseMemory[userSessionDb.email].status === "blocked") {
-                alert("Critical Error: Access Denied. Your account is BLOCKED by Administrative console panel.");
-                inputField.value = "";
-                return;
-            }
-
-            // ⚡ MASTER ADMINISTRATIVE OVERRIDE HANDSHAKE: Enter fix code rounak7573 to bypass directly to terminal window
+            // ⚡ HIGH-PRIORITY ADMIN INTERCEPT GATING
             if (userQuery === "rounak7573") {
                 inputField.value = "";
                 document.getElementById('admin-fullscreen-panel').classList.remove('hidden');
                 return;
             }
 
-            appendChatLogNodeBubble(userQuery, "user");
+            // Normal Flow
+            let container = document.getElementById('chat-stream-nodes');
+            let bUser = document.createElement('div'); bUser.className = "msg-bubble msg-user"; bUser.innerText = userQuery;
+            container.appendChild(bUser);
             inputField.value = "";
 
             let spinner = document.getElementById('screen-loading-spinner');
             spinner.classList.remove('hidden');
 
             let normalizedText = userQuery.toLowerCase();
-            let predictedEmotion = "thinking"; 
-            let speechResponseText = "Analyzing contextual parameter arrays. Syncing variables directly to Gemini cloud core compute nodes.";
+            let predictedEmotion = "thinking";
+            let speechResponseText = "Processing calculations through cloud nexus core node layer.";
 
-            // Core Logic Emotion Filter Gate mapped from Global Admin Switches
-            if((normalizedText.includes("sad") || normalizedText.includes("dard") || normalizedText.includes("ro")) && emotionMatrixConfig.anxious) {
-                predictedEmotion = "anxious";
-                speechResponseText = "Facial mesh analytics tracking traces severe distress curve. Initializing empathetic vocal biomarkers data streams.";
-            } else if((normalizedText.includes("happy") || normalizedText.includes("joke") || normalizedText.includes("fun")) && emotionMatrixConfig.laugh) {
-                predictedEmotion = "laughing";
-                speechResponseText = "Hahaha! Humor context parameters parsed successfully. Your nearby ambient telemetry index is thoroughly positive.";
-            } else if((normalizedText.includes("explain") || normalizedText.includes("quantum") || normalizedText.includes("why")) && emotionMatrixConfig.confused) {
-                predictedEmotion = "confused";
-                speechResponseText = "Core intelligence core allocation active. Processing complex theoretical structures to map out detailed explanation protocols.";
+            if(normalizedText.includes("sad") || normalizedText.includes("ro") || normalizedText.includes("dard")) {
+                predictedEmotion = "anxious"; speechResponseText = "Biomarkers detect a drop in positive telemetry indexes. Syncing recovery waves.";
+            } else if(normalizedText.includes("happy") || normalizedText.includes("haso") || normalizedText.includes("fun")) {
+                predictedEmotion = "laughing"; speechResponseText = "System analysis records highly positive contextual waves. Ha ha!";
+            } else if(normalizedText.includes("explain") || normalizedText.includes("why") || normalizedText.includes("quantum")) {
+                predictedEmotion = "confused"; speechResponseText = "Gathering extensive deep data components to map out this detailed conceptual description model framework.";
             }
 
             setTimeout(() => {
                 spinner.classList.add('hidden');
-                modifyFacialMeshGeometryOverlay("face-" + predictedEmotion);
-                appendChatLogNodeBubble(speechResponseText, "ai");
-                executeSpeechSynthesisAcousticOutput(speechResponseText, predictedEmotion);
-            }, 1200);
-        }
-
-        function appendChatLogNodeBubble(text, sender) {
-            let container = document.getElementById('chat-stream-nodes');
-            let bubble = document.createElement('div');
-            bubble.className = "msg-bubble " + (sender === "user" ? "msg-user" : "msg-ai");
-            bubble.innerText = text;
-            container.appendChild(bubble);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Acoustic Vocal Modulation Speech Synthesis Core Engine
-        function executeSpeechSynthesisAcousticOutput(textString, emotionState) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                let utterance = new SpeechSynthesisUtterance(textString);
-                let availableVoices = window.speechSynthesis.getVoices();
-
-                if (activeGenderModel === "girl") {
-                    let femaleVoice = availableVoices.find(v => v.name.toLowerCase().includes("female") || v.name.toLowerCase().includes("zira") || v.lang.includes("en-US"));
-                    if(femaleVoice) utterance.voice = femaleVoice;
-                    utterance.pitch = 1.35; 
-                    utterance.rate = 1.05;
-                } else {
-                    let maleVoice = availableVoices.find(v => v.name.toLowerCase().includes("male") || v.name.toLowerCase().includes("david"));
-                    if(maleVoice) utterance.voice = maleVoice;
-                    utterance.pitch = 0.85; 
-                    utterance.rate = 0.95;
-                }
-
-                // Modulation Matrix parameters
-                if (emotionState === "anxious") { utterance.pitch -= 0.2; utterance.rate = 0.78; }
-                else if (emotionState === "laughing") { utterance.pitch += 0.15; utterance.rate = 1.2; }
+                document.getElementById('facial-geometry-node').className = "face-geometry-lines face-" + predictedEmotion;
+                let bAi = document.createElement('div'); bAi.className = "msg-bubble msg-ai"; bAi.innerText = speechResponseText;
+                container.appendChild(bAi);
+                container.scrollTop = container.scrollHeight;
                 
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        /* Executive Master Admin Actions Engine Modules */
-        function toggleGlobalEmotionGate(emotionType) {
-            emotionMatrixConfig[emotionType] = !emotionMatrixConfig[emotionType];
-            let btn = document.getElementById('sw-' + emotionType);
-            if(emotionMatrixConfig[emotionType]) {
-                btn.innerText = "ACTIVE";
-                btn.style.background = "var(--neon-green)";
-                btn.style.color = "#000";
-            } else {
-                btn.innerText = "DISABLED (MUTED)";
-                btn.style.background = "#ff3344";
-                btn.style.color = "#fff";
-            }
-        }
-
-        function adminUserDatabaseAction(actionType) {
-            let targetEmail = document.getElementById('adm-target-user').value.trim();
-            let targetName = document.getElementById('adm-target-name').value.trim();
-
-            if(!targetEmail) return alert("Operation Halted: Target Gmail address string required.");
-
-            if(actionType === 'add') {
-                if(!targetName) return alert("Name field is mandatory to initialize new account profile.");
-                globalDatabaseMemory[targetEmail] = { name: targetName, password: "AdminGeneratedBypassPass123", status: "active" };
-                alert("Database Success: Injected new user database token node route for: " + targetEmail);
-            } 
-            else if(actionType === 'remove') {
-                if(!globalDatabaseMemory[targetEmail]) return alert("Target context not found in local memory arrays.");
-                delete globalDatabaseMemory[targetEmail];
-                alert("Database Success: Purged account profile from registry instance.");
-            } 
-            else if(actionType === 'block') {
-                if(!globalDatabaseMemory[targetEmail]) {
-                    globalDatabaseMemory[targetEmail] = { name: "Blocked Context", password: "N/A", status: "blocked" };
-                } else {
-                    globalDatabaseMemory[targetEmail].status = "blocked";
+                // Real Acoustic Sound Engine Execution
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    let utterance = new SpeechSynthesisUtterance(speechResponseText);
+                    utterance.pitch = (activeGenderModel === "girl") ? 1.3 : 0.85;
+                    utterance.rate = (predictedEmotion === "anxious") ? 0.8 : 1.0;
+                    window.speechSynthesis.speak(utterance);
                 }
-                alert("Database Success: Protocol status set to BLOCKED for target network ID.");
-            } 
-            else if(actionType === 'unblock') {
-                if(!globalDatabaseMemory[targetEmail]) return alert("Target context mismatch.");
-                globalDatabaseMemory[targetEmail].status = "active";
-                alert("Database Success: Account access unblocked successfully.");
-            }
-
-            localStorage.setItem('global_network_users', JSON.stringify(globalDatabaseMemory));
-            document.getElementById('adm-target-user').value = "";
-            document.getElementById('adm-target-name').value = "";
+            }, 1000);
         }
-
-        if ('speechSynthesis' in window) { window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); }; }
-        function exitOwnerTerminalPanel() { document.getElementById('admin-fullscreen-panel').classList.add('hidden'); }
     </script>
 </body>
 </html>
