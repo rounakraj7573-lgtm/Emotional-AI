@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emotional AI Interface</title>
+    <style>
+        body { background: #121212; color: white; text-align: center; font-family: sans-serif; }
+        #ai-screen { width: 300px; height: 300px; border: 2px solid white; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        #chat-box { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Emotional AI</h1>
+    <div id="ai-screen">AI Emotion Screen (Loading...)</div>
+    
+    <div id="chat-box">
+        <input type="text" id="user-input" placeholder="Message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let msg = document.getElementById('user-input').value;
+            if(msg === "Rounak@7573") {
+                alert("Control Panel Unlocked!");
+            } else {
+                console.log("Sending to AI:", msg);
+            }
+        }
+    </script>
+</body>
+</html>
+
