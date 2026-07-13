@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Emotional AI Interface</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional AI</title>
     <style>
-        body { background: #121212; color: white; text-align: center; font-family: sans-serif; }
-        #ai-screen { width: 300px; height: 300px; border: 2px solid white; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
-        #chat-box { margin-top: 20px; }
+        body { background-color: black; color: white; text-align: center; font-family: sans-serif; }
+        #ai-screen { width: 90vw; height: 300px; border: 2px solid white; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        #chat-section { margin-top: 20px; }
+        input { padding: 10px; width: 60%; }
+        button { padding: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
+
     <h1>Emotional AI</h1>
-    <div id="ai-screen">AI Emotion Screen (Loading...)</div>
-    
-    <div id="chat-box">
-        <input type="text" id="user-input" placeholder="Message...">
-        <button onclick="sendMessage()">Send</button>
+    <div id="ai-screen">
+        <p>AI Face Screen</p>
+    </div>
+
+    <div id="chat-section">
+        <input type="text" id="userInput" placeholder="Kuch likhiye...">
+        <button onclick="processInput()">Send</button>
     </div>
 
     <script>
-        function sendMessage() {
-            let msg = document.getElementById('user-input').value;
-            if(msg === "Rounak@7573") {
-                alert("Control Panel Unlocked!");
+        function processInput() {
+            let input = document.getElementById("userInput").value;
+            
+            // Password check
+            if(input === "Rounak@7573") {
+                alert("Control Panel Open ho gaya!");
             } else {
-                console.log("Sending to AI:", msg);
+                alert("Aapne likha: " + input);
+                // Yahan Gemini API ka call aayega baad mein
             }
         }
     </script>
 </body>
 </html>
-
