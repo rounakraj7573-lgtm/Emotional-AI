@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotional AI</title>
     <style>
-        body { background-color: black; color: #00ffcc; font-family: monospace; text-align: center; }
-        #ai-face { width: 300px; height: 300px; border: 2px solid #00ffcc; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
-        #chat-box { width: 90%; max-width: 400px; height: 200px; background: #222; margin: 0 auto; overflow-y: auto; padding: 10px; border: 1px solid #444; }
-        input { width: 70%; padding: 10px; margin-top: 10px; }
-        button { padding: 10px; cursor: pointer; }
+        body { background: #000; color: #00ffcc; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        #ai-face { width: 300px; height: 300px; border: 2px solid #00ffcc; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        #chat-box { width: 100%; max-width: 400px; height: 200px; background: #222; overflow-y: auto; padding: 10px; border: 1px solid #444; }
+        .input-area { margin-top: 10px; width: 100%; max-width: 400px; display: flex; }
+        input { flex: 1; padding: 10px; }
+        button { padding: 10px; }
     </style>
 </head>
 <body>
-
-    <h2>Emotional AI Controller</h2>
-    <div id="ai-face">AI Emotion Face</div>
+    <h2>Emotional AI</h2>
+    <div id="ai-face">AI Face</div>
     <div id="chat-box"></div>
-    <div>
-        <input type="text" id="userInput" placeholder="Message...">
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Kuch likhiye...">
         <button onclick="runAI()">Send</button>
     </div>
 
@@ -26,21 +25,21 @@
         async function runAI() {
             let input = document.getElementById("userInput").value;
             let chatBox = document.getElementById("chat-box");
-            
-            if (input === "Rounak@7573") {
-                chatBox.innerHTML += "<p><b>System:</b> Control Panel Unlocked!</p>";
-                return;
-            }
+            if (!input) return;
 
             chatBox.innerHTML += `<p>You: ${input}</p>`;
             
-            const response = await fetch('/api/chat', { 
-                method: 'POST',
-                body: JSON.stringify({ message: input })
-            });
-            
-            const data = await response.json();
-            chatBox.innerHTML += `<p>AI: ${data.reply}</p>`;
+            try {
+                const res = await fetch('/api/chat', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: input })
+                });
+                const data = await res.json();
+                chatBox.innerHTML += `<p>AI: ${data.reply}</p>`;
+            } catch (err) {
+                chatBox.innerHTML += `<p style='color:red;'>Error: Connection failed.</p>`;
+            }
             document.getElementById("userInput").value = "";
         }
     </script>
